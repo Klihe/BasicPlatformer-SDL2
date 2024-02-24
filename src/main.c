@@ -18,7 +18,7 @@ int main() {
 
     // create window
     SDL_Window* window_main = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-    SDL_Window* window_treasure = SDL_CreateWindow("SDL Treasure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_HIDDEN);
+    SDL_Window* window_treasure = SDL_CreateWindow("SDL Treasure", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_HIDDEN);
     if (window_main == NULL || window_treasure == NULL) {
         fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
         SDL_Quit();
@@ -37,7 +37,7 @@ int main() {
     }
 
     // create player and map
-    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, 5, 1, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_E, SDL_SCANCODE_Q, SDL_SCANCODE_SPACE, false};
+    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, 5, 1, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_E, SDL_SCANCODE_Q, SDL_SCANCODE_SPACE, false};
     Map map = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -64,7 +64,9 @@ int main() {
 
         // clear screen
         SDL_SetRenderDrawColor(renderer_main, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer_treasure, 0, 0, 100, 255);
         SDL_RenderClear(renderer_main);
+        SDL_RenderClear(renderer_treasure);
 
         // draw map and player
         drawMap(&map, renderer_main);
@@ -79,6 +81,7 @@ int main() {
 
         // present renderer
         SDL_RenderPresent(renderer_main);
+        SDL_RenderPresent(renderer_treasure);
         SDL_Delay(1000/60);
     }
     

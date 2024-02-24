@@ -12,6 +12,20 @@ void movePlayer(Player* player, const Uint8* state) {
     player->prevX = player->rect.x;
     player->prevY = player->rect.y;
 
+    if (state[player->sprintKey] && !state[player->downKey]) {
+        player->speedMultiplier = 2;
+        if (player->rect.h != 80) {
+            player->rect.y -= 20;
+            player->rect.h = 80;
+        }
+    } else {
+        player->speedMultiplier = 1;
+        if (player->rect.h != 60) {
+            player->rect.y += 20;
+            player->rect.h = 60;
+        }
+    }
+
     // left and right movement
     if (state[player->leftKey] && player->rect.x > 0) {
         player->rect.x -= player->speed * player->speedMultiplier;

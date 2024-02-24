@@ -31,6 +31,7 @@ typedef struct Player {
     SDL_Scancode rightKey;
     SDL_Scancode upKey;
     SDL_Scancode downKey;
+    SDL_Scancode sprintKey;
     SDL_Scancode meleeAttackKey;
     SDL_Scancode rangedAttackKey;
     SDL_Scancode openTreasureKey;
