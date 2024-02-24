@@ -14,6 +14,7 @@ enum FaceDirection {
     FACE_RIGHT
 };
 
+// define map type
 enum MapType {
     MAP1,
     MAP2

@@ -7,6 +7,7 @@
 // include files
 #include "config.h"
 
+// define tile types
 enum TileType{
     TILE_EMPTY,
     TILE_SOLID,
