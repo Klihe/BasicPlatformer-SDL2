@@ -17,13 +17,13 @@ void jumpPlayer(Player* player, const Uint8* state) {
         player->jumping = true;
     }
     if (player->jumping) {
-        if (player->jumpStrength >= -10) {
-            player->rect.y -= (player->jumpStrength * abs(player->jumpStrength)) * 0.5;
+        if (player->jumpStrength >= -15) {
+            player->rect.y -= (player->jumpStrength * abs(player->jumpStrength)) * 0.25;
             player->jumpStrength--;
         } else {
             player->rect.y = WINDOW_HEIGHT - player->rect.h;
             player->jumping = false;
-            player->jumpStrength = 10;
+            player->jumpStrength = 15;
         }
     }
 }

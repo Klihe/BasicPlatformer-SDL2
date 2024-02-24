@@ -6,6 +6,7 @@
 
 #include "config.h"
 #include "player.h"
+#include "map.h"
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -28,7 +29,16 @@ int main() {
         return 1;
     }
 
-    Player player = {{0, WINDOW_HEIGHT - 50, 50, 100}, {255, 0, 0, 255}, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, 5, 10, false};
+    Player player = {{0, WINDOW_HEIGHT - 80, 60, 80}, {255, 0, 0, 255}, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, 5, 15, false};
+    Map map = {{{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}};
 
 
     SDL_Event event;
@@ -43,6 +53,8 @@ int main() {
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
+
+        drawMap(&map, renderer);
 
         drawPlayer(&player, renderer);
         movePlayer(&player, state);
