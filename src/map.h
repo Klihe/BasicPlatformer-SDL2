@@ -11,7 +11,8 @@ enum TileType{
     TILE_EMPTY,
     TILE_SOLID,
     TILE_LADDER,
-    TILE_LADDER_DOWN
+    TILE_LADDER_DOWN,
+    TILE_TREAUSURE
 };
 
 // define map struct

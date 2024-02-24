@@ -29,11 +29,25 @@ void movePlayer(Player* player, const Uint8* state) {
         player->rect.y += player->speed * player->speedMultiplier;
 }
 
+void openTreasurePlayer(Player* player, const Uint8* state, SDL_Window* window) {
+    if (state[player->openTreasureKey] && player->onTreasure == true && !player->openTreasure) {
+        SDL_ShowWindow(window);
+        player->openTreasure = true;
+        SDL_Delay(100);
+    }
+    else if (state[player->openTreasureKey] && player->openTreasure) {
+        SDL_HideWindow(window);
+        player->openTreasure = false;
+        SDL_Delay(100);
+    }
+}
+
 // handle player collision
 void handlePlayerCollision(Player* player, Map* map) {
     // default state
     player->ladder = false;
     player->ladderDown = false;
+    player->onTreasure = false;
 
     // check collision with map tiles
     for (int i = 0; i < MAP_WIDTH; i++) {
@@ -56,6 +70,9 @@ void handlePlayerCollision(Player* player, Map* map) {
                 // ladder down tile
                 else if (map->tiles[j][i] == TILE_LADDER_DOWN){
                     player->ladderDown = true;
+                }
+                else if (map->tiles[j][i] == TILE_TREAUSURE){
+                    player->onTreasure = true;
                 }
             }
             // else if (map->tiles[j][i] == 0 && map->tiles[j+1][i] == 0) {
