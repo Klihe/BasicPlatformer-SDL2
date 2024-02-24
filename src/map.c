@@ -1,5 +1,6 @@
 #include "map.h"
 
+// draw map
 void drawMap(Map* map, SDL_Renderer* renderer) {
     for (int i = 0; i < MAP_WIDTH; i++) {
         for (int j = 0; j < MAP_HEIGHT; j++) {
