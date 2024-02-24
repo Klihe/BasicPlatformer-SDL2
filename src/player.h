@@ -14,11 +14,17 @@ enum FaceDirection {
     FACE_RIGHT
 };
 
+enum MapType {
+    MAP1,
+    MAP2
+};
+
 // define player struct
 typedef struct Player {
     // visual representation
     SDL_Rect rect;
     SDL_Color color;
+    enum MapType mapType;
 
     // movement
     int speed;

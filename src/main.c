@@ -37,8 +37,8 @@ int main() {
     }
 
     // create player and map
-    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, 5, 1, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_E, SDL_SCANCODE_Q, SDL_SCANCODE_SPACE, false};
-    Map map = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0},
+    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, MAP1, 5, 1, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_E, SDL_SCANCODE_Q, SDL_SCANCODE_SPACE, false};
+    Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
                 {0,0,0,2,0,0,0,2,1,1,1,2,1,0,0,0},
@@ -46,6 +46,15 @@ int main() {
                 {0,2,1,1,1,1,1,1,0,0,0,2,0,3,0,0},
                 {0,2,0,0,0,0,0,0,0,0,0,1,1,2,1,0},
                 {0,2,0,0,0,0,0,0,0,0,0,0,0,2,0,0},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}};
+    Map map2 = {{{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}};
 
     // game loop
@@ -67,16 +76,23 @@ int main() {
         SDL_SetRenderDrawColor(renderer_treasure, 0, 0, 100, 255);
         SDL_RenderClear(renderer_main);
         SDL_RenderClear(renderer_treasure);
+        
+        // handle player collision
+        if (player.mapType == MAP1) {
+            drawMap(&map1, renderer_main);
+            handlePlayerCollision(&player, &map1);
+        }
+        else if (player.mapType == MAP2) {
+            drawMap(&map2, renderer_main);
+            handlePlayerCollision(&player, &map2);
+        }
 
-        // draw map and player
-        drawMap(&map, renderer_main);
+        // draw player
         meleeAttackPlayer(&player, state, renderer_main);
         rangedAttackPlayer(&player, state, renderer_main);
         drawPlayer(&player, renderer_main);
         movePlayer(&player, state);
 
-        // handle player collision
-        handlePlayerCollision(&player, &map);
         openTreasurePlayer(&player, state, window_treasure);
 
         // present renderer

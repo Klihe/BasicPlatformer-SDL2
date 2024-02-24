@@ -88,6 +88,16 @@ void handlePlayerCollision(Player* player, Map* map) {
                 else if (map->tiles[j][i] == TILE_TREAUSURE){
                     player->onTreasure = true;
                 }
+                else if (map->tiles[j][i] == TILE_PORTAL_FOWARD){
+                    player->mapType = player->mapType +1;
+                    player->rect.x = 0;
+                    player->rect.y = WINDOW_HEIGHT - 140;
+                }
+                else if (map->tiles[j][i] == TILE_PORTAL_BACKWARD){
+                    player->mapType = player->mapType -1;
+                    player->rect.x = WINDOW_WIDTH - 40;
+                    player->rect.y = WINDOW_HEIGHT - 140;
+                }
             }
             // else if (map->tiles[j][i] == 0 && map->tiles[j+1][i] == 0) {
             //     if (!player->fall && (player->rect.x >= tileRect.x &&
