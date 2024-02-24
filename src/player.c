@@ -13,16 +13,20 @@ void movePlayer(Player* player, const Uint8* state) {
     player->prevY = player->rect.y;
 
     // left and right movement
-    if (state[player->leftKey] && player->rect.x > 0)
-        player->rect.x -= player->speed;
-    if (state[player->rightKey] && player->rect.x < WINDOW_WIDTH - player->rect.w)
-        player->rect.x += player->speed;
+    if (state[player->leftKey] && player->rect.x > 0) {
+        player->rect.x -= player->speed * player->speedMultiplier;
+        player->faceDirection = FACE_LEFT;
+    }
+    if (state[player->rightKey] && player->rect.x < WINDOW_WIDTH - player->rect.w) {
+        player->rect.x += player->speed * player->speedMultiplier;
+        player->faceDirection = FACE_RIGHT;
+    }
 
     // ladder movement
     if (state[player->upKey] && player->ladder == true)
-        player->rect.y -= player->speed;
+        player->rect.y -= player->speed * player->speedMultiplier;
     if (state[player->downKey] && (player->ladder == true || player->ladderDown == true))
-        player->rect.y += player->speed;
+        player->rect.y += player->speed * player->speedMultiplier;
 }
 
 // handle player collision
@@ -40,17 +44,17 @@ void handlePlayerCollision(Player* player, Map* map) {
                 player->rect.y < tileRect.y + tileRect.h &&
                 player->rect.y + player->rect.h > tileRect.y) {
                 // solid tile
-                if (map->tiles[j][i] == 1){
+                if (map->tiles[j][i] == TILE_SOLID){
                     player->rect.x = player->prevX;
                     player->rect.y = player->prevY;
                     // player->fall = false;
                 }
                 // ladder tile
-                else if (map->tiles[j][i] == 2){
+                else if (map->tiles[j][i] == TILE_LADDER){
                     player->ladder = true;
                 }
                 // ladder down tile
-                else if (map->tiles[j][i] == 3){
+                else if (map->tiles[j][i] == TILE_LADDER_DOWN){
                     player->ladderDown = true;
                 }
             }
@@ -74,27 +78,37 @@ void meleeAttackPlayer(Player* player, const Uint8* state, SDL_Renderer* rendere
     if (state[player->meleeAttackKey] && SDL_GetTicks() - player->meleeAttackTime > 2000) {
         player->meleeAttackActive = true;
         player->meleeAttackTime = SDL_GetTicks();
+        player->speedMultiplier = 0.5;
     }
     else if (player->meleeAttackActive) {
         SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
         SDL_RenderFillRect(renderer, &meleeAttackRect);
         if (SDL_GetTicks() - player->meleeAttackTime > 1000) {
             player->meleeAttackActive = false;
+            player->speedMultiplier = 1;
         }
     }
 }
 
 void rangedAttackPlayer(Player* player, const Uint8* state, SDL_Renderer* renderer) {
-    SDL_Rect rangedAttackRect = {player->rect.x, player->rect.y + 20, WINDOW_WIDTH-player->rect.x, player->rect.h - 40};
+    SDL_Rect rangedAttackRectLeft = {0, player->rect.y + 20, player->rect.x, player->rect.h - 40};
+    SDL_Rect rangedAttackRectRight = {player->rect.x, player->rect.y + 20, WINDOW_WIDTH-player->rect.x, player->rect.h - 40};
     if (state[player->rangedAttackKey] && SDL_GetTicks() - player->rangedAttackTime > 2000) {
         player->rangedAttackActive = true;
         player->rangedAttackTime = SDL_GetTicks();
+        player->speedMultiplier = 0.5;
     }
     else if (player->rangedAttackActive) {
         SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rangedAttackRect);
+        if (player->faceDirection == FACE_RIGHT) {
+            SDL_RenderFillRect(renderer, &rangedAttackRectRight);
+        }
+        else if (player->faceDirection == FACE_LEFT) {
+            SDL_RenderFillRect(renderer, &rangedAttackRectLeft);
+        }
         if (SDL_GetTicks() - player->rangedAttackTime > 1000) {
             player->rangedAttackActive = false;
+            player->speedMultiplier = 1;
         }
     }
 }

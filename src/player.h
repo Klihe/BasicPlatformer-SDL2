@@ -9,6 +9,11 @@
 #include "map.h"
 #include "config.h"
 
+enum FaceDirection {
+    FACE_LEFT,
+    FACE_RIGHT
+};
+
 // define player struct
 typedef struct Player {
     // visual representation
@@ -17,6 +22,7 @@ typedef struct Player {
 
     // movement
     int speed;
+    float speedMultiplier;
     int prevX;
     int prevY;
 
@@ -30,6 +36,7 @@ typedef struct Player {
 
     // state
         // bool fall;
+    enum FaceDirection faceDirection;
     bool ladder;
     bool ladderDown;
     bool meleeAttackActive;
