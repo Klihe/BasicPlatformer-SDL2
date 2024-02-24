@@ -29,7 +29,7 @@ int main() {
         return 1;
     }
 
-    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, 5, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S,};
+    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, 5, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, false};
     Map map = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0},
                 {0,0,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -62,6 +62,7 @@ int main() {
         handlePlayerCollision(&player, &map);
 
         SDL_RenderPresent(renderer);
+        SDL_Delay(1000/60);
     }
 
     SDL_DestroyRenderer(renderer);

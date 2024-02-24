@@ -24,31 +24,33 @@ void handlePlayerCollision(Player* player, Map* map) {
     for (int i = 0; i < MAP_WIDTH; i++) {
         for (int j = 0; j < MAP_HEIGHT; j++) {
             SDL_Rect tileRect = {i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE};
-            if (map->tiles[j][i]) {
-                if (player->rect.x < tileRect.x + tileRect.w &&
-                    player->rect.x + player->rect.w > tileRect.x &&
-                    player->rect.y < tileRect.y + tileRect.h &&
-                    player->rect.y + player->rect.h > tileRect.y) {
-                    if (map->tiles[j][i] == 1){
-                        player->rect.x = player->prevX;
-                        player->rect.y = player->prevY;
-                    }
-                    else if (map->tiles[j][i] == 2){
-                        player->ladder = true;
-                    }
-                    else if (map->tiles[j][i] == 3){
-                        player->ladderDown = true;
-                    }
+            if (player->rect.x < tileRect.x + tileRect.w &&
+                player->rect.x + player->rect.w > tileRect.x &&
+                player->rect.y < tileRect.y + tileRect.h &&
+                player->rect.y + player->rect.h > tileRect.y) {
+                if (map->tiles[j][i] == 1){
+                    player->rect.x = player->prevX;
+                    player->rect.y = player->prevY;
+                    // player->fall = false;
                 }
-            if (map->tiles[j][i] == 0) {
-                if (player->rect.x >= tileRect.x &&
-                    player->rect.y >= tileRect.y &&
-                    player->rect.x + player->rect.w <= tileRect.x + tileRect.w &&
-                    player->rect.y + player->rect.h <= tileRect.y + tileRect.h) {
-                    player->rect.y += player->speed;
-                    }
+                else if (map->tiles[j][i] == 2){
+                    player->ladder = true;
+                }
+                else if (map->tiles[j][i] == 3){
+                    player->ladderDown = true;
                 }
             }
+            // else if (map->tiles[j][i] == 0 && map->tiles[j+1][i] == 0) {
+            //     if (!player->fall && (player->rect.x >= tileRect.x &&
+            //         player->rect.y >= tileRect.y &&
+            //         player->rect.x + player->rect.w <= tileRect.x + tileRect.w &&
+            //         player->rect.y + player->rect.h <= tileRect.y + tileRect.h)) {
+            //         player->fall = true;
+            //     }
+            //     if (player->fall) {
+            //         player->rect.y += player->speed;
+            //     }
+            // }
         }
     }
 }
