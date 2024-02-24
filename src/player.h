@@ -19,8 +19,9 @@ typedef struct Player {
     SDL_Scancode rightKey;
     SDL_Scancode upKey;
     SDL_Scancode downKey;
-
-    int ladder;
+    
+    bool ladder;
+    bool ladderDown;
 
 } Player;
 
