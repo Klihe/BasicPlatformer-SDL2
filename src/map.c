@@ -10,7 +10,7 @@ void drawMap(Map* map, SDL_Renderer* renderer) {
             }
             if (map->tiles[j][i] == 2) {
                 SDL_Rect rect = {i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE};
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
                 SDL_RenderFillRect(renderer, &rect);
             }
         }

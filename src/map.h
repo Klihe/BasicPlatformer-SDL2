@@ -2,10 +2,7 @@
 #define MAP_H
 
 #include <SDL.h>
-
-#define MAP_WIDTH 16
-#define MAP_HEIGHT 9
-#define TILE_SIZE 80
+#include "config.h"
 
 typedef struct {
     int tiles[MAP_HEIGHT][MAP_WIDTH];
