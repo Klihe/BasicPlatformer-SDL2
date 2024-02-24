@@ -68,3 +68,33 @@ void handlePlayerCollision(Player* player, Map* map) {
         }
     }
 }
+
+void meleeAttackPlayer(Player* player, const Uint8* state, SDL_Renderer* renderer) {
+    SDL_Rect meleeAttackRect = {player->rect.x - 40, player->rect.y, player->rect.w + 80, player->rect.h};
+    if (state[player->meleeAttackKey] && SDL_GetTicks() - player->meleeAttackTime > 2000) {
+        player->meleeAttackActive = true;
+        player->meleeAttackTime = SDL_GetTicks();
+    }
+    else if (player->meleeAttackActive) {
+        SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &meleeAttackRect);
+        if (SDL_GetTicks() - player->meleeAttackTime > 1000) {
+            player->meleeAttackActive = false;
+        }
+    }
+}
+
+void rangedAttackPlayer(Player* player, const Uint8* state, SDL_Renderer* renderer) {
+    SDL_Rect rangedAttackRect = {player->rect.x, player->rect.y + 20, WINDOW_WIDTH-player->rect.x, player->rect.h - 40};
+    if (state[player->rangedAttackKey] && SDL_GetTicks() - player->rangedAttackTime > 2000) {
+        player->rangedAttackActive = true;
+        player->rangedAttackTime = SDL_GetTicks();
+    }
+    else if (player->rangedAttackActive) {
+        SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rangedAttackRect);
+        if (SDL_GetTicks() - player->rangedAttackTime > 1000) {
+            player->rangedAttackActive = false;
+        }
+    }
+}

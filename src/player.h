@@ -25,11 +25,17 @@ typedef struct Player {
     SDL_Scancode rightKey;
     SDL_Scancode upKey;
     SDL_Scancode downKey;
+    SDL_Scancode meleeAttackKey;
+    SDL_Scancode rangedAttackKey;
 
     // state
         // bool fall;
     bool ladder;
     bool ladderDown;
+    bool meleeAttackActive;
+    int meleeAttackTime;
+    bool rangedAttackActive;
+    int rangedAttackTime;
 
 } Player;
 
@@ -37,5 +43,7 @@ typedef struct Player {
 void drawPlayer(Player *player, SDL_Renderer *renderer);
 void movePlayer(Player *player, const Uint8 *state);
 void handlePlayerCollision(Player *player, Map *map);
+void meleeAttackPlayer(Player *player, const Uint8 *state, SDL_Renderer *renderer);
+void rangedAttackPlayer(Player *player, const Uint8 *state, SDL_Renderer *renderer);
 
 #endif
