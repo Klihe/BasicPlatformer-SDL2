@@ -69,15 +69,15 @@ void movePlayer(Player* self, const Uint8* state) {
 
     if (state[self->sprintKey] && !(state[self->upKey] && self->onLadder) && !(state[self->downKey] && self->onLadder)) {
         self->speedMultiplier = 1.5;
-        if (self->height != 75) {
-            self->y -= 15;
-            self->height = 75;
+        if (self->height != self->defaultHeight * 1.25) {
+            self->y -= self->defaultHeight * 0.25;
+            self->height = self->defaultHeight * 1.25;
         }
     } else {
         self->speedMultiplier = 1;
-        if (self->height != 60) {
-            self->y += 15;
-            self->height = 60;
+        if (self->height != self->defaultHeight) {
+            self->y += self->defaultHeight * 0.25;
+            self->height = self->defaultHeight;
         }
     }
     if (state[self->leftKey] && self->x > 0) {
@@ -169,7 +169,7 @@ void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uin
 }
 
 void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time) {
-    SDL_Rect rectLeft = {0, self->y + self->height, self->x, self->height - self->width};
+    SDL_Rect rectLeft = {0, self->y + self->height/3, self->x, self->height - self->width};
     SDL_Rect rectRight = {self->x + self->width, self->y + self->height/3, WINDOW_WIDTH - self->x, self->height - self->width};
     if (state[self->attack2Key] && time - self->attack2Timer > self->attack2Cooldown) {
         self->attack2Active = true;
