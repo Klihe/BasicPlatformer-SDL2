@@ -2,11 +2,11 @@
 
 Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, int moveTo) {
     Enemy self;
-    self.x = x;
-    self.y = y;
-
     self.width = width;
     self.height = height;
+
+    self.x = x * TILE_SIZE + self.width;
+    self.y = y * TILE_SIZE - self.height;
 
     self.isAlive = true;
     self.health = 100;
@@ -24,8 +24,8 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
     self.speedMultiplier = 1;
     self.speed = self.defaultSpeed * self.speedMultiplier;
 
-    self.moveFrom = moveFrom;
-    self.moveTo = moveTo;
+    self.moveFrom = moveFrom * TILE_SIZE + self.width;
+    self.moveTo = moveTo * TILE_SIZE;
 
     self.attackActive = false;
     self.attackTimer = 0;

@@ -39,7 +39,11 @@ int main() {
 
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-140, 40, 60, 5);
-    Enemy enemy1 = createEnemy(TILE_SIZE*14+40, TILE_SIZE*6-60, 40, 60, 2, TILE_SIZE*14+40, TILE_SIZE*11);
+    Enemy enemy1 = createEnemy(14, 6, 40, 60, 2, 14, 11);
+    Enemy enemy2 = createEnemy(2, 5, 40, 60, 2, 7, 1);
+    Enemy enemy3 = createEnemy(6, 5, 40, 60, 2, 7, 1);
+    Enemy enemy4 = createEnemy(7, 3, 40, 60, 2, 12, 7);
+    Enemy enemy5 = createEnemy(1, 2, 40, 60, 2, 4, 1);
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -86,6 +90,14 @@ int main() {
             handlePlayerCollision(&player, &map1);
             drawEnemy(&enemy1, renderer_main);
             moveEnemy(&enemy1, player.x, player.y);
+            drawEnemy(&enemy2, renderer_main);
+            moveEnemy(&enemy2, player.x, player.y);
+            drawEnemy(&enemy3, renderer_main);
+            moveEnemy(&enemy3, player.x, player.y);
+            drawEnemy(&enemy4, renderer_main);
+            moveEnemy(&enemy4, player.x, player.y);
+            drawEnemy(&enemy5, renderer_main);
+            moveEnemy(&enemy5, player.x, player.y);
         }
         else if (player.location == MAP2) {
             drawMap(&map2, renderer_main);
