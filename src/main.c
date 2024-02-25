@@ -5,7 +5,7 @@
 
 // include files
 #include "config.h"
-#include "player.h"
+#include "entity/player.h"
 #include "enemy.h"
 #include "map.h"
 
@@ -38,7 +38,7 @@ int main() {
     }
 
     // create player and map
-    Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, MAP1, 5, 1, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_E, SDL_SCANCODE_Q, SDL_SCANCODE_SPACE, false};
+    Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-140, 40, 60, 5);
     Enemy enemy1 = {{TILE_SIZE*14+40, TILE_SIZE*6-60, 40, 60}, {0, 0, 255, 255}, TILE_SIZE*14+40, TILE_SIZE*11, ENEMY_FACE_LEFT, 2, 100, 20, true};
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
@@ -71,6 +71,7 @@ int main() {
         }
 
         // handle player input
+        Uint32 time = SDL_GetTicks();
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
         // clear screen
@@ -80,25 +81,25 @@ int main() {
         SDL_RenderClear(renderer_treasure);
         
         // handle player collision
-        if (player.mapType == MAP1) {
+        if (player.location == MAP1) {
             drawMap(&map1, renderer_main);
             handlePlayerCollision(&player, &map1);
         }
-        else if (player.mapType == MAP2) {
+        else if (player.location == MAP2) {
             drawMap(&map2, renderer_main);
             handlePlayerCollision(&player, &map2);
         }
 
         // draw player
-        meleeAttackPlayer(&player, state, renderer_main);
-        rangedAttackPlayer(&player, state, renderer_main);
+        attack1Player(&player, state, renderer_main, time);
+        attack2Player(&player, state, renderer_main, time);
         drawPlayer(&player, renderer_main);
         movePlayer(&player, state);
 
         drawEnemy(&enemy1, renderer_main);
-        moveEnemy(&enemy1, player.rect.x, player.rect.y);
+        moveEnemy(&enemy1, player.x, player.y);
 
-        openTreasurePlayer(&player, state, window_treasure);
+        openChestPlayer(&player, state, window_treasure);
 
         // present renderer
         SDL_RenderPresent(renderer_main);

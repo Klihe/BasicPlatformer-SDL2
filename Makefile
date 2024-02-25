@@ -1,7 +1,7 @@
 SRC_DIR = src
 BUILD_DIR = build/debug
 CC = gcc
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+SRC_FILES = $(shell find $(SRC_DIR) -name '*.c')
 OBJ_NAME = play
 INCLUDE_PATHS = -I include/SDL2 -I include/SDL2_image -I include/SDL2_ttf
 LIBRARY_PATHS = -L lib/SDL2 -L lib/SDL2_image -L lib/SDL2_ttf

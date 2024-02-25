@@ -4,7 +4,6 @@
 #include <SDL.h>
 
 #include "config.h"
-
 enum FaceEnemyDirection {
     ENEMY_FACE_LEFT,
     ENEMY_FACE_RIGHT
