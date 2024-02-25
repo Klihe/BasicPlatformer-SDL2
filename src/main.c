@@ -39,11 +39,11 @@ int main() {
 
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-140, 40, 60, 5);
-    Enemy enemy1 = createEnemy(14, 6, 40, 60, 2, 14, 11);
-    Enemy enemy2 = createEnemy(2, 5, 40, 60, 2, 7, 1);
-    Enemy enemy3 = createEnemy(6, 5, 40, 60, 2, 7, 1);
-    Enemy enemy4 = createEnemy(7, 3, 40, 60, 2, 12, 7);
-    Enemy enemy5 = createEnemy(1, 2, 40, 60, 2, 4, 1);
+    Enemy enemy1 = createEnemy(14, 6, 40, 60, 3, 14, 11);
+    Enemy enemy2 = createEnemy(2, 5, 40, 60, 3, 7, 1);
+    Enemy enemy3 = createEnemy(6, 5, 40, 60, 3, 7, 1);
+    Enemy enemy4 = createEnemy(7, 3, 40, 60, 3, 12, 7);
+    Enemy enemy5 = createEnemy(1, 2, 40, 60, 3, 4, 1);
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},

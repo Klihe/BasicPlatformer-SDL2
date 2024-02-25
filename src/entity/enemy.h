@@ -25,7 +25,7 @@ typedef struct Enemy {
     int defaultSpeed;
     float speedMultiplier;
     int speed;
-
+        
     int moveFrom;
     int moveTo;
 
