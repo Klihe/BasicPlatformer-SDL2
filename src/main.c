@@ -6,6 +6,7 @@
 // include files
 #include "config.h"
 #include "player.h"
+#include "enemy.h"
 #include "map.h"
 
 // main function
@@ -38,6 +39,7 @@ int main() {
 
     // create player and map
     Player player = {{WINDOW_WIDTH/2 - 40/2, WINDOW_HEIGHT - 140, 40, 60}, {255, 0, 0, 255}, MAP1, 5, 1, 0, WINDOW_HEIGHT - 60, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_E, SDL_SCANCODE_Q, SDL_SCANCODE_SPACE, false};
+    Enemy enemy1 = {{TILE_SIZE*14+40, TILE_SIZE*6-60, 40, 60}, {0, 0, 255, 255}, TILE_SIZE*14+40, TILE_SIZE*11, ENEMY_FACE_LEFT, 2, 100, 20, true};
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -92,6 +94,9 @@ int main() {
         rangedAttackPlayer(&player, state, renderer_main);
         drawPlayer(&player, renderer_main);
         movePlayer(&player, state);
+
+        drawEnemy(&enemy1, renderer_main);
+        moveEnemy(&enemy1, player.rect.x, player.rect.y);
 
         openTreasurePlayer(&player, state, window_treasure);
 
