@@ -6,7 +6,7 @@
 // include files
 #include "config.h"
 #include "entity/player.h"
-#include "enemy.h"
+#include "entity/enemy.h"
 #include "map.h"
 
 // main function
@@ -39,7 +39,7 @@ int main() {
 
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-140, 40, 60, 5);
-    Enemy enemy1 = {{TILE_SIZE*14+40, TILE_SIZE*6-60, 40, 60}, {0, 0, 255, 255}, TILE_SIZE*14+40, TILE_SIZE*11, ENEMY_FACE_LEFT, 2, 100, 20, true};
+    Enemy enemy1 = createEnemy(TILE_SIZE*14+40, TILE_SIZE*6-60, 40, 60, 2, TILE_SIZE*14+40, TILE_SIZE*11);
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -84,6 +84,8 @@ int main() {
         if (player.location == MAP1) {
             drawMap(&map1, renderer_main);
             handlePlayerCollision(&player, &map1);
+            drawEnemy(&enemy1, renderer_main);
+            moveEnemy(&enemy1, player.x, player.y);
         }
         else if (player.location == MAP2) {
             drawMap(&map2, renderer_main);
@@ -95,9 +97,6 @@ int main() {
         attack2Player(&player, state, renderer_main, time);
         drawPlayer(&player, renderer_main);
         movePlayer(&player, state);
-
-        drawEnemy(&enemy1, renderer_main);
-        moveEnemy(&enemy1, player.x, player.y);
 
         openChestPlayer(&player, state, window_treasure);
 
