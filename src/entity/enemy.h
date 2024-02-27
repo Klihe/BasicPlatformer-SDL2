@@ -1,6 +1,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+#include "player.h"
 #include "config_entity.h"
 
 typedef struct Enemy {
