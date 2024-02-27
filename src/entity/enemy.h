@@ -20,6 +20,7 @@ typedef struct Enemy {
 
     enum FaceDirection faceDirection;
 
+    bool seePlayer;
     bool isMoving;
     bool isSprinting;
     int defaultSpeed;

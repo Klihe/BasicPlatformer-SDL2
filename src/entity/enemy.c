@@ -18,6 +18,7 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
 
     self.faceDirection = FACE_LEFT;
 
+    self.seePlayer = false;
     self.isMoving = false;
     self.isSprinting = false;
     self.defaultSpeed = speed;
@@ -44,24 +45,37 @@ void drawEnemy(Enemy* self, SDL_Renderer* renderer) {
 void moveEnemy(Enemy* self, int playerX, int playerY) {
     self->speed = self->defaultSpeed * self->speedMultiplier;
     if (self->isAlive) {
-        if (self->faceDirection == FACE_LEFT) {
-            if (self->x >= playerX && self->y >= playerY - 40 && self->y <= playerY) {
-                if (self->x <= playerX + 5 && self->x >= playerX - 5) {
-                    self->speedMultiplier = 0;
-                } else {
-                    self->speedMultiplier = 2;
-                }
+        if (self->seePlayer && self->y < playerY + 40 && self->y > playerY - 40) {
+            if (self->x < playerX - 40 && self->moveFrom > playerX) {
+                self->speedMultiplier = 2;
+                self->x += self->speed;
+            } else if (self->x > playerX + 40 && self->moveTo < playerX) {
+                self->speedMultiplier = 2;
+                self->x -= self->speed;
             } else {
-                self->speedMultiplier = 1;
+                //printf("attack\n");
             }
-            self->x -= self->speed;
-            if (self->x < self->moveTo) {
+        } else {
+            self->seePlayer = false;
+        }
+        if (self->faceDirection == FACE_LEFT && !self->seePlayer) {
+            if ((self->y < playerY + 40 && self->y > playerY - 40) && self->x > playerX && self->moveTo < playerX) {
+                self->seePlayer = true;
+            }
+            else if (self->x > self->moveTo) {
+                self->speedMultiplier = 1;
+                self->x -= self->speed;
+            } else {
                 self->faceDirection = FACE_RIGHT;
             }
-        } 
-        else if (self->faceDirection == FACE_RIGHT) {
-            self->x += self->speed;
-            if (self->x > self->moveFrom) {
+        } else if (self->faceDirection == FACE_RIGHT && !self->seePlayer) {
+            if ((self->y < playerY + 40 && self->y > playerY - 40) && self->x < playerX && self->moveFrom > playerX) {
+                self->seePlayer = true;
+            }
+            else if (self->x < self->moveFrom) {
+                self->speedMultiplier = 1;
+                self->x += self->speed;
+            } else {
                 self->faceDirection = FACE_LEFT;
             }
         }

@@ -24,7 +24,6 @@ int getCollisionValue(SDL_Rect* a, SDL_Rect* b) {
     int result = 0;
     if (a->y + a->h > b->y) {
         result = a->y + a->h - b->y;
-        printf("Collision %d\n", result);
     }
 
     return result;
