@@ -22,6 +22,7 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
 
     self.isMoving = false;
     self.isSprinting = false;
+    self.isFalling = true;
     self.defaultSpeed = speed;
     self.speedMultiplier = 1;
     self.speed = self.defaultSpeed * self.speedMultiplier;
@@ -98,16 +99,20 @@ void movePlayer(Player* self, const Uint8* state) {
     }
 }
 
-void openChestPlayer(Player* self, const Uint8* state, SDL_Window* window) {
-    if (state[self->interactKey] && self->onChest == true && !self->onOpenChest) {
-        SDL_ShowWindow(window);
-        self->onOpenChest = true;
+void openChestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer) {
+    SDL_Rect rect = {WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 - 100, 200, 200};
+    if (state[self->interactKey] && self->onChest) {
         SDL_Delay(100);
-    }
-    else if (state[self->interactKey] && self->onOpenChest) {
-        SDL_HideWindow(window);
-        self->onOpenChest = false;
-        SDL_Delay(100);
+        if (!self->onOpenChest) {
+            self->onOpenChest = true;
+        }
+        else {
+            self->onOpenChest = false;
+        }
+    } 
+    if (self->onOpenChest && self->onChest) {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rect);
     }
 }
 
@@ -115,6 +120,7 @@ void handlePlayerCollision(Player* self, Map* map) {
     self->onLadder = false;
     self->onLadderDown = false;
     self->onChest = false;
+    self->isFalling = true;
 
     for (int i = 0; i < MAP_WIDTH; i++) {
         for (int j = 0; j < MAP_HEIGHT; j++) {
@@ -124,30 +130,47 @@ void handlePlayerCollision(Player* self, Map* map) {
                 self->y < tileRect.y + tileRect.h &&
                 self->y + self->height > tileRect.y) {
                 if (map->tiles[j][i] == TILE_SOLID){
-                    self->x = self->prevX;
-                    self->y = self->prevY;
+                    self->isFalling = false;
+                    int result = getCollisionValue(&(SDL_Rect){self->x, self->y, self->width, self->height}, &tileRect);
+                    self->isFalling = !result;
+                    if (result > 20) {
+                        self->y = self->prevY;
+                        self->x = self->prevX;
+                    }
+                    else if (result > 1) {
+                        self->y -= result-1;
+                        self->x = self->prevX;
+                    }
                 }
                 else if (map->tiles[j][i] == TILE_LADDER){
+                    self->isFalling = false;
                     self->onLadder = true;
                 }
                 else if (map->tiles[j][i] == TILE_LADDER_DOWN){
+                    self->isFalling = true;
                     self->onLadderDown = true;
                 }
                 else if (map->tiles[j][i] == TILE_TREAUSURE){
                     self->onChest = true;
+                    self->isFalling = false;
                 }
                 else if (map->tiles[j][i] == TILE_PORTAL_FOWARD){
+                    self->isFalling = false;
                     self->location = self->location +1;
                     self->x = 0;
                     self->y = WINDOW_HEIGHT - 140;
                 }
                 else if (map->tiles[j][i] == TILE_PORTAL_BACKWARD){
+                    self->isFalling = false;
                     self->location = self->location -1;
                     self->x = WINDOW_WIDTH - 40;
                     self->y = WINDOW_HEIGHT - 140;
                 }
             }
         }
+    }
+    if (self->isFalling) {
+        self->y += 5;
     }
 }
 

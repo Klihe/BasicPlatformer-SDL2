@@ -1,9 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <SDL.h>
-
 #include "config_entity.h"
+#include "../collision/collision.h"
 
 typedef struct Player {
     int x;
@@ -26,6 +25,7 @@ typedef struct Player {
 
     bool isMoving;
     bool isSprinting;
+    bool isFalling;
     int defaultSpeed;
     float speedMultiplier;
     int speed;
@@ -61,7 +61,7 @@ typedef struct Player {
 Player createPlayer(int x, int y, int width, int height, int speed);
 void drawPlayer(Player* self, SDL_Renderer* renderer);
 void movePlayer(Player* self, const Uint8* state);
-void openChestPlayer(Player* self, const Uint8* state, SDL_Window* window);
+void openChestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer);
 void handlePlayerCollision(Player* self, Map* map);
 void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);
 void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);

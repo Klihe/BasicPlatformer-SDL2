@@ -1,6 +1,8 @@
 #ifndef CONFIG_ENTITY_H
 #define CONFIG_ENTITY_H
 
+#include <SDL.h>
+#include <SDL_image.h>
 #include <stdbool.h>
 
 #include "../map.h"

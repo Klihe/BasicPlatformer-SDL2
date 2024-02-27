@@ -44,37 +44,22 @@ void drawEnemy(Enemy* self, SDL_Renderer* renderer) {
 void moveEnemy(Enemy* self, int playerX, int playerY) {
     self->speed = self->defaultSpeed * self->speedMultiplier;
     if (self->isAlive) {
-        if (self->y <= playerY + 40 && self->y >= playerY - 40 && self->moveFrom > playerX && self->moveTo < playerX) {
-            if (self->x < playerX && self->faceDirection == FACE_RIGHT) {
-                self->speedMultiplier = 2;
-                self->x += self->speed;
-            }
-            else if (self->x > playerX && self->faceDirection == FACE_LEFT) {
-                self->speedMultiplier = 2;
-                self->x -= self->speed;
-            }
-            else if (self->faceDirection == FACE_LEFT) {
-                self->speedMultiplier = 1;
-                self->x -= self->speed;
-                if (self->x < self->moveTo) {
-                    self->faceDirection = FACE_RIGHT;
+        if (self->faceDirection == FACE_LEFT) {
+            if (self->x >= playerX && self->y >= playerY - 40 && self->y <= playerY) {
+                if (self->x <= playerX + 5 && self->x >= playerX - 5) {
+                    self->speedMultiplier = 0;
+                } else {
+                    self->speedMultiplier = 2;
                 }
             } else {
                 self->speedMultiplier = 1;
-                self->x += self->speed;
-                if (self->x > self->moveFrom) {
-                    self->faceDirection = FACE_LEFT;
-                }
-            }    
-        }
-        else if (self->faceDirection == FACE_LEFT) {
-            self->speedMultiplier = 1;
+            }
             self->x -= self->speed;
             if (self->x < self->moveTo) {
                 self->faceDirection = FACE_RIGHT;
             }
-        } else {
-            self->speedMultiplier = 1;
+        } 
+        else if (self->faceDirection == FACE_RIGHT) {
             self->x += self->speed;
             if (self->x > self->moveFrom) {
                 self->faceDirection = FACE_LEFT;
