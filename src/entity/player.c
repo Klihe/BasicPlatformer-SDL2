@@ -57,10 +57,11 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     return self;
 };
 
-void drawPlayer(Player* self, SDL_Renderer* renderer) {
+void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture) {
     SDL_Rect rect = {self->x, self->y, self->width, self->height};
-    SDL_SetRenderDrawColor(renderer, self->colorR, self->colorG, self->colorB, self->colorA);
-    SDL_RenderFillRect(renderer, &rect);
+    //SDL_SetRenderDrawColor(renderer, self->colorR, self->colorG, self->colorB, self->colorA);
+    //SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
 }
 
 void movePlayer(Player* self, const Uint8* state) {

@@ -41,6 +41,9 @@ int main() {
         return 1;
     }
 
+    SDL_Surface* surface = IMG_Load("src/img/player.png");
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_main, surface);
+
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-140+1, 40, 60, 5);
     Enemy enemy1 = createEnemy(14, 6, 40, 60, 3, 14, 11);
@@ -109,7 +112,7 @@ int main() {
         // draw player
         attack1Player(&player, state, renderer_main, time);
         attack2Player(&player, state, renderer_main, time);
-        drawPlayer(&player, renderer_main);
+        drawPlayer(&player, renderer_main, texture);
         movePlayer(&player, state);
 
         openChestPlayer(&player, state, renderer_main);
@@ -120,6 +123,8 @@ int main() {
     }
     
     // clean up
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
     SDL_DestroyRenderer(renderer_main);
     SDL_DestroyWindow(window_main);
     SDL_Quit();

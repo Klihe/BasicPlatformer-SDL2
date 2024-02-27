@@ -59,7 +59,7 @@ typedef struct Player {
 } Player;
 
 Player createPlayer(int x, int y, int width, int height, int speed);
-void drawPlayer(Player* self, SDL_Renderer* renderer);
+void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture);
 void movePlayer(Player* self, const Uint8* state);
 void openChestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer);
 void handlePlayerCollision(Player* self, Map* map);
