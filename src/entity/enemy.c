@@ -24,9 +24,11 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
     self.moveTo = moveTo * TILE_SIZE;
 
     self.attackActive = false;
+    self.attackDamage = 20;
     self.attackTimer = 0;
     self.attackCooldown = 2000;
-    self.attackDuration = 1000;
+    self.attackDuration = 1;
+    self.attackRect = (SDL_Rect){0, 0, 0, 0};
 
     return self;
 }
@@ -52,7 +54,7 @@ void moveEnemy(Enemy* self, int playerX, int playerY) {
                 self->speedMultiplier = 2;
                 self->x -= self->speed;
             } else {
-                //printf("attack\n");
+                attackEnemy(self, SDL_GetTicks());
             }
         } else {
             self->seePlayer = false;
@@ -81,7 +83,23 @@ void moveEnemy(Enemy* self, int playerX, int playerY) {
     }
 }
 
-void checkEnemy(Enemy* self) {
+void attackEnemy(Enemy* self, Uint32 time) {
+    self->attackRect = (SDL_Rect){self->x - self->width, self->y, self->width * 3, self->height};
+    if (time - self->attackTimer > self->attackCooldown) {
+        self->attackActive = true;
+        self->attackTimer = time;
+        self->speedMultiplier = 0.5;
+    }
+    else if (self->attackActive) {
+        if (time - self->attackTimer > self->attackDuration) {
+            printf("attack\n");
+            self->attackActive = false;
+            self->speedMultiplier = 1;
+        }
+    }
+}
+
+void updateEnemy(Enemy* self) {
     self->rect = (SDL_Rect){self->x, self->y, self->width, self->height};
     if (self->health <= 0) {
         self->isAlive = false;

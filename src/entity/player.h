@@ -13,6 +13,9 @@ typedef struct Player {
     int height;
     SDL_Rect rect;
 
+    bool isAlive;
+    int health;
+
     enum FaceDirection faceDirection;
     enum Location location;
 

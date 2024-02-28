@@ -27,14 +27,17 @@ typedef struct Enemy {
     int moveTo;
 
     bool attackActive;
+    int attackDamage;
     int attackTimer;
     int attackCooldown;
     int attackDuration;
+    SDL_Rect attackRect;
 } Enemy;
 
 Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, int moveTo);
 void drawEnemy(Enemy* enemy, SDL_Renderer* renderer, SDL_Texture* texture_left, SDL_Texture* texture_right);
 void moveEnemy(Enemy* enemy, int playerX, int playerY);
-void checkEnemy(Enemy* enemy);
+void updateEnemy(Enemy* enemy);
+void attackEnemy(Enemy* enemy, Uint32 time);
 
 #endif // ENEMY_H

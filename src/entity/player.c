@@ -10,6 +10,9 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.height = height;
     self.rect = (SDL_Rect){self.x, self.y, self.width, self.height};
 
+    self.isAlive = true;
+    self.health = 100;
+
     self.faceDirection = FACE_RIGHT;
     self.location = MAP1;
 
@@ -208,4 +211,8 @@ void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uin
 
 void updatePlayer(Player* self) {
     self->rect = (SDL_Rect){self->x, self->y, self->width, self->height};
+    printf("Player health: %d\n", self->health);
+    if (self->health <= 0) {
+        self->isAlive = false;
+    }
 }

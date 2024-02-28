@@ -97,6 +97,10 @@ int main() {
             }
         }
 
+        if (!player.isAlive) {
+            quit = true;
+        }
+
         // handle player input
         Uint32 time = SDL_GetTicks();
         const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -114,7 +118,8 @@ int main() {
                 enemy[i].health -= attackCollision(&player.attack1Rect, &enemy[i].rect, player.attack1Active, player.attack1Damage);
                 enemy[i].health -= attackCollision(&player.attack2Rect_left, &enemy[i].rect, player.attack2Active, player.attack2Damage);
                 enemy[i].health -= attackCollision(&player.attack2Rect_right, &enemy[i].rect, player.attack2Active, player.attack2Damage);
-                checkEnemy(&enemy[i]);
+                updateEnemy(&enemy[i]);
+                player.health -= attackCollision(&enemy[i].attackRect, &player.rect, enemy[i].attackActive, enemy[i].attackDamage);
             }
         }
         else if (player.location == MAP2) {
