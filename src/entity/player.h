@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "config_entity.h"
-#include "../collision/collision.h"
+#include "../interaction/interaction.h"
 
 typedef struct Player {
     int x;

@@ -12,16 +12,9 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.defaultWidth = self.width;
     self.defaultHeight = self.height;
 
-    self.colorR = 255;
-    self.colorG = 0;
-    self.colorB = 0;
-    self.colorA = 255;
-
     self.faceDirection = FACE_RIGHT;
     self.location = MAP1;
 
-    self.isMoving = false;
-    self.isSprinting = false;
     self.isFalling = true;
     self.defaultSpeed = speed;
     self.speedMultiplier = 1;
@@ -58,7 +51,10 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
 };
 
 void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture) {
-    SDL_RenderCopy(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+    if (self->faceDirection == FACE_LEFT)
+        SDL_RenderCopy(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+    else if (self->faceDirection == FACE_RIGHT)
+        SDL_RenderCopyEx(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height}, 0, NULL, SDL_FLIP_HORIZONTAL);
 }
 
 void movePlayer(Player* self, const Uint8* state) {

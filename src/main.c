@@ -41,8 +41,10 @@ int main() {
         return 1;
     }
 
-    SDL_Surface* surface_player_idle = IMG_Load("src/img/player/player_idle.png");
-    SDL_Texture* texture_player_idle = SDL_CreateTextureFromSurface(renderer_main, surface_player_idle);
+    SDL_Surface* surface_background = IMG_Load("src/img/background.png");
+    SDL_Texture* texture_background = SDL_CreateTextureFromSurface(renderer_main, surface_background);
+    SDL_Surface* surface_player_left = IMG_Load("src/img/player/player_left.png");
+    SDL_Texture* texture_player_left = SDL_CreateTextureFromSurface(renderer_main, surface_player_left);
     SDL_Surface* surface_enemy_left = IMG_Load("src/img/enemy/enemy_left.png");
     SDL_Texture* texture_enemy_left = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_left);
     SDL_Surface* surface_enemy_right = IMG_Load("src/img/enemy/enemy_right.png");
@@ -99,9 +101,9 @@ int main() {
         Uint32 time = SDL_GetTicks();
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
+        //SDL_FreeSurface(surface_background);
         // clear screen
-        SDL_SetRenderDrawColor(renderer_main, 100, 100, 100, 255);
-        SDL_RenderClear(renderer_main);
+        SDL_RenderCopy(renderer_main, texture_background, NULL, NULL);
         
         // handle player collision
         if (player.location == MAP1) {
@@ -120,7 +122,7 @@ int main() {
         // draw player
         attack1Player(&player, state, renderer_main, time);
         attack2Player(&player, state, renderer_main, time);
-        drawPlayer(&player, renderer_main, texture_player_idle);
+        drawPlayer(&player, renderer_main, texture_player_left);
         movePlayer(&player, state);
 
         openChestPlayer(&player, state, renderer_main);
@@ -131,8 +133,6 @@ int main() {
     }
     
     // clean up
-    SDL_DestroyTexture(texture_player_idle);
-    SDL_FreeSurface(surface_player_idle);
     SDL_DestroyRenderer(renderer_main);
     SDL_DestroyWindow(window_main);
     SDL_Quit();
