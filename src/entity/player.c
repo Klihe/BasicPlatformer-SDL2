@@ -61,7 +61,7 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
 };
 
 void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time) {
-    if (self->isMoving) {
+    if (self->isMoving && self->isAlive) {
         if (time > self->frameNext) {
             self->frame = (self->frame + 1) % 4;
             self->frameNext = time + self->frameDelay;
@@ -72,7 +72,7 @@ void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uin
         else if (self->faceDirection == FACE_RIGHT) {
             SDL_RenderCopyEx(renderer, texture[self->frame], NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
         }
-    } else {
+    } else if (self->isAlive) {
         if (self->faceDirection == FACE_LEFT) {
             SDL_RenderCopy(renderer, texture[0], NULL, &self->rect);
         }

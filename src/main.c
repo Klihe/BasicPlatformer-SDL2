@@ -112,10 +112,6 @@ int main() {
             }
         }
 
-        if (!player.isAlive) {
-            quit = true;
-        }
-
         // handle player input
         Uint32 time = SDL_GetTicks();
         const Uint8* state = SDL_GetKeyboardState(NULL);
