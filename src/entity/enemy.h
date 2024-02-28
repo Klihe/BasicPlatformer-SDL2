@@ -22,6 +22,10 @@ typedef struct Enemy {
     int defaultSpeed;
     float speedMultiplier;
     int speed;
+
+    int frame;
+    Uint32 frameDelay;
+    Uint32 frameNext;
         
     int moveFrom;
     int moveTo;
@@ -35,7 +39,7 @@ typedef struct Enemy {
 } Enemy;
 
 Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, int moveTo);
-void drawEnemy(Enemy* enemy, SDL_Renderer* renderer, SDL_Texture* texture_left, SDL_Texture* texture_right);
+void drawEnemy(Enemy* enemy, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time);
 void moveEnemy(Enemy* enemy, int playerX, int playerY);
 void updateEnemy(Enemy* enemy);
 void attackEnemy(Enemy* enemy, Uint32 time);

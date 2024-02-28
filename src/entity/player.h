@@ -20,10 +20,15 @@ typedef struct Player {
     enum Location location;
 
     bool isFalling;
+    bool isMoving;
     int fallingSpeed;
     int defaultSpeed;
     float speedMultiplier;
     int speed;
+
+    int frame;
+    Uint32 frameDelay;
+    Uint32 frameNext;
 
     SDL_Scancode upKey;
     SDL_Scancode downKey;
@@ -57,7 +62,7 @@ typedef struct Player {
 } Player;
  
 Player createPlayer(int x, int y, int width, int height, int speed);
-void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture);
+void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time);
 void movePlayer(Player* self, const Uint8* state);
 void openChestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer);
 void handlePlayerCollision(Player* self, Map* map);

@@ -44,12 +44,26 @@ int main() {
 
     SDL_Surface* surface_background = IMG_Load("src/img/background.png");
     SDL_Texture* texture_background = SDL_CreateTextureFromSurface(renderer_main, surface_background);
-    SDL_Surface* surface_player_left = IMG_Load("src/img/player/player_left.png");
-    SDL_Texture* texture_player_left = SDL_CreateTextureFromSurface(renderer_main, surface_player_left);
-    SDL_Surface* surface_enemy_left = IMG_Load("src/img/enemy/enemy_left.png");
-    SDL_Texture* texture_enemy_left = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_left);
-    SDL_Surface* surface_enemy_right = IMG_Load("src/img/enemy/enemy_right.png");
-    SDL_Texture* texture_enemy_right = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_right);
+
+    SDL_Surface* surface_player[4] = {IMG_Load("src/img/player/player_1.png"),
+                                      IMG_Load("src/img/player/player_2.png"),
+                                      IMG_Load("src/img/player/player_3.png"),
+                                      IMG_Load("src/img/player/player_4.png")};
+    SDL_Texture* texture_player[4] = {SDL_CreateTextureFromSurface(renderer_main, surface_player[0]),
+                                        SDL_CreateTextureFromSurface(renderer_main, surface_player[1]),
+                                        SDL_CreateTextureFromSurface(renderer_main, surface_player[2]),
+                                        SDL_CreateTextureFromSurface(renderer_main, surface_player[3])};
+
+    SDL_Surface* surface_enemy[4] = {IMG_Load("src/img/enemy/enemy_1.png"),
+                                      IMG_Load("src/img/enemy/enemy_2.png"),
+                                      IMG_Load("src/img/enemy/enemy_3.png"),
+                                      IMG_Load("src/img/enemy/enemy_4.png")};
+    
+    SDL_Texture* texture_enemy[4] = {SDL_CreateTextureFromSurface(renderer_main, surface_enemy[0]),
+                                        SDL_CreateTextureFromSurface(renderer_main, surface_enemy[1]),
+                                        SDL_CreateTextureFromSurface(renderer_main, surface_enemy[2]),
+                                        SDL_CreateTextureFromSurface(renderer_main, surface_enemy[3])};
+
     SDL_Surface* surface_block_ladder = IMG_Load("src/img/ladder.png");
     SDL_Texture* texture_block_ladder = SDL_CreateTextureFromSurface(renderer_main, surface_block_ladder);
     SDL_Surface* surface_block_solid = IMG_Load("src/img/cobble.png");
@@ -63,11 +77,11 @@ int main() {
 
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-160+1, 44, 64, 5);
-    Enemy enemy[5] = {createEnemy(14, 6, 60, 80, 3, 14, 11),
-                      createEnemy(2, 5, 60, 80, 3, 7, 1),
-                      createEnemy(6, 5, 60, 80, 3, 7, 1),
-                      createEnemy(7, 3, 60, 80, 3, 12, 7),
-                      createEnemy(1, 2, 60, 80, 3, 4, 1)};
+    Enemy enemy[5] = {createEnemy(14, 6, 56, 64, 3, 14, 11),
+                      createEnemy(2, 5, 56, 64, 3, 7, 1),
+                      createEnemy(6, 5, 56, 64, 3, 7, 1),
+                      createEnemy(7, 3, 56, 64, 3, 12, 7),
+                      createEnemy(1, 2, 56, 64, 3, 4, 1)};
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -114,7 +128,7 @@ int main() {
             drawMap(&map1, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
             handlePlayerCollision(&player, &map1);
             for (int i = 0; i < 5; i++) {
-                drawEnemy(&enemy[i], renderer_main, texture_enemy_left, texture_enemy_right);
+                drawEnemy(&enemy[i], renderer_main, texture_enemy, time);
                 moveEnemy(&enemy[i], player.x, player.y);
                 enemy[i].health -= attackCollision(&player.attack1Rect, &enemy[i].rect, player.attack1Active, player.attack1Damage);
                 enemy[i].health -= attackCollision(&player.attack2Rect_left, &enemy[i].rect, player.attack2Active, player.attack2Damage);
@@ -131,7 +145,7 @@ int main() {
         // draw player
         attack1Player(&player, state, renderer_main, time);
         attack2Player(&player, state, renderer_main, time);
-        drawPlayer(&player, renderer_main, texture_player_left);
+        drawPlayer(&player, renderer_main, texture_player, time);
         movePlayer(&player, state);
         updatePlayer(&player);
         healthBar(renderer_main, player.health);

@@ -17,10 +17,15 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.location = MAP1;
 
     self.isFalling = true;
+    self.isMoving = false;
     self.fallingSpeed = 0;
     self.defaultSpeed = speed;
     self.speedMultiplier = 1;
     self.speed = self.defaultSpeed * self.speedMultiplier;
+
+    self.frame = 0;
+    self.frameDelay = 100;
+    self.frameNext = 0;
 
     self.upKey = SDL_SCANCODE_W;
     self.downKey = SDL_SCANCODE_S;
@@ -55,17 +60,33 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     return self;
 };
 
-void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture) {
-    if (self->faceDirection == FACE_LEFT)
-        SDL_RenderCopy(renderer, texture, NULL, &self->rect);
-    else if (self->faceDirection == FACE_RIGHT)
-        SDL_RenderCopyEx(renderer, texture, NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time) {
+    if (self->isMoving) {
+        if (time > self->frameNext) {
+            self->frame = (self->frame + 1) % 4;
+            self->frameNext = time + self->frameDelay;
+        }
+        if (self->faceDirection == FACE_LEFT) {
+            SDL_RenderCopy(renderer, texture[self->frame], NULL, &self->rect);
+        }
+        else if (self->faceDirection == FACE_RIGHT) {
+            SDL_RenderCopyEx(renderer, texture[self->frame], NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+        }
+    } else {
+        if (self->faceDirection == FACE_LEFT) {
+            SDL_RenderCopy(renderer, texture[0], NULL, &self->rect);
+        }
+        else if (self->faceDirection == FACE_RIGHT) {
+            SDL_RenderCopyEx(renderer, texture[0], NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+        }
+    }
 }
 
 void movePlayer(Player* self, const Uint8* state) {
     self->prevX = self->x;
     self->prevY = self->y;
     self->speed = self->defaultSpeed * self->speedMultiplier;
+    self->isMoving = false;
 
     if (state[self->sprintKey] && !(state[self->upKey] && self->onLadder) && !(state[self->downKey] && self->onLadder)) {
         self->speedMultiplier = 1.5;
@@ -75,18 +96,22 @@ void movePlayer(Player* self, const Uint8* state) {
     if (state[self->leftKey] && self->x > 0) {
         self->x -= self->speed;
         self->faceDirection = FACE_LEFT;
+        self->isMoving = true;
     }
     if (state[self->rightKey] && self->x < WINDOW_WIDTH - self->width) {
         self->x += self->speed;
         self->faceDirection = FACE_RIGHT;
+        self->isMoving = true;
     }
     if (state[self->upKey] && self->onLadder == true) {
         self->y -= self->speed;
         self->speedMultiplier = 0.75;
+        self->isMoving = true;
     }
     if (state[self->downKey] && (self->onLadder == true || self->onLadderDown == true)) {
         self->y += self->speed;
         self->speedMultiplier = 0.5;
+        self->isMoving = true;
     }
 }
 

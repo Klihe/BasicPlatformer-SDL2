@@ -20,6 +20,10 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
     self.speedMultiplier = 1;
     self.speed = self.defaultSpeed * self.speedMultiplier;
 
+    self.frame = 0;
+    self.frameDelay = 100;
+    self.frameNext = 0;
+
     self.moveFrom = moveFrom * TILE_SIZE + self.width;
     self.moveTo = moveTo * TILE_SIZE;
 
@@ -33,18 +37,31 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
     return self;
 }
 
-void drawEnemy(Enemy* self, SDL_Renderer* renderer, SDL_Texture* texture_left, SDL_Texture* texture_right) {
-    if (self->isAlive) {
+void drawEnemy(Enemy* self, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time) {
+    if (self->isMoving) {
+        if (time > self->frameNext) {
+            self->frame = (self->frame + 1) % 4;
+            self->frameNext = time + self->frameDelay;
+        }
         if (self->faceDirection == FACE_LEFT) {
-            SDL_RenderCopy(renderer, texture_left, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
-        } else {
-            SDL_RenderCopy(renderer, texture_right, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+            SDL_RenderCopy(renderer, texture[self->frame], NULL, &self->rect);
+        }
+        else if (self->faceDirection == FACE_RIGHT) {
+            SDL_RenderCopyEx(renderer, texture[self->frame], NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+        }
+    } else {
+        if (self->faceDirection == FACE_LEFT) {
+            SDL_RenderCopy(renderer, texture[0], NULL, &self->rect);
+        }
+        else if (self->faceDirection == FACE_RIGHT) {
+            SDL_RenderCopyEx(renderer, texture[0], NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
         }
     }
 }
 
 void moveEnemy(Enemy* self, int playerX, int playerY) {
     if (self->isAlive) {
+        self->isMoving = true;
         self->speed = self->defaultSpeed * self->speedMultiplier;
         if (self->seePlayer && self->y < playerY + 40 && self->y > playerY - 40) {
             if (self->x < playerX - 40 && self->moveFrom > playerX) {
@@ -91,11 +108,8 @@ void attackEnemy(Enemy* self, Uint32 time) {
         self->speedMultiplier = 0.5;
     }
     else if (self->attackActive) {
-        if (time - self->attackTimer > self->attackDuration) {
-            printf("attack\n");
-            self->attackActive = false;
-            self->speedMultiplier = 1;
-        }
+        self->attackActive = false;
+        self->speedMultiplier = 1;
     }
 }
 
