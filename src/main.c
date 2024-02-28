@@ -112,6 +112,10 @@ int main() {
             for (int i = 0; i < 5; i++) {
                 drawEnemy(&enemy[i], renderer_main, texture_enemy_left, texture_enemy_right);
                 moveEnemy(&enemy[i], player.x, player.y);
+                enemy[i].health -= attackCollision(&player.attack1Rect, &enemy[i].rect, player.attack1Active, player.attack1Damage);
+                enemy[i].health -= attackCollision(&player.attack2Rect_left, &enemy[i].rect, player.attack2Active, player.attack2Damage);
+                enemy[i].health -= attackCollision(&player.attack2Rect_right, &enemy[i].rect, player.attack2Active, player.attack2Damage);
+                checkEnemy(&enemy[i]);
             }
         }
         else if (player.location == MAP2) {
@@ -124,6 +128,7 @@ int main() {
         attack2Player(&player, state, renderer_main, time);
         drawPlayer(&player, renderer_main, texture_player_left);
         movePlayer(&player, state);
+        updatePlayer(&player);
 
         openChestPlayer(&player, state, renderer_main);
 

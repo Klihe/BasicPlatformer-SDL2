@@ -29,3 +29,10 @@ int getCollisionValue(SDL_Rect* a, SDL_Rect* b) {
     return result;
 }
 
+int attackCollision(SDL_Rect* a, SDL_Rect* b, bool active, int damage) {
+    if (checkCollision(a, b) && active) {
+        return damage;
+    } else {
+        return 0;
+    }
+}

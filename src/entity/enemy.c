@@ -4,17 +4,12 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
     Enemy self;
     self.width = width;
     self.height = height;
-
     self.x = x * TILE_SIZE + self.width;
     self.y = y * TILE_SIZE - self.height;
+    self.rect = (SDL_Rect){self.x, self.y, self.width, self.height};
 
     self.isAlive = true;
-    self.health = 100;
-
-    self.colorR = 0;
-    self.colorG = 0;
-    self.colorB = 255;
-    self.colorA = 255;
+    self.health = 20;
 
     self.faceDirection = FACE_LEFT;
 
@@ -37,17 +32,18 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
 }
 
 void drawEnemy(Enemy* self, SDL_Renderer* renderer, SDL_Texture* texture_left, SDL_Texture* texture_right) {
-    if (self->faceDirection == FACE_LEFT) {
-        SDL_RenderCopy(renderer, texture_left, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
-    } else {
-        SDL_RenderCopy(renderer, texture_right, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+    if (self->isAlive) {
+        if (self->faceDirection == FACE_LEFT) {
+            SDL_RenderCopy(renderer, texture_left, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+        } else {
+            SDL_RenderCopy(renderer, texture_right, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+        }
     }
-    
 }
 
 void moveEnemy(Enemy* self, int playerX, int playerY) {
-    self->speed = self->defaultSpeed * self->speedMultiplier;
     if (self->isAlive) {
+        self->speed = self->defaultSpeed * self->speedMultiplier;
         if (self->seePlayer && self->y < playerY + 40 && self->y > playerY - 40) {
             if (self->x < playerX - 40 && self->moveFrom > playerX) {
                 self->speedMultiplier = 2;
@@ -82,5 +78,12 @@ void moveEnemy(Enemy* self, int playerX, int playerY) {
                 self->faceDirection = FACE_LEFT;
             }
         }
+    }
+}
+
+void checkEnemy(Enemy* self) {
+    self->rect = (SDL_Rect){self->x, self->y, self->width, self->height};
+    if (self->health <= 0) {
+        self->isAlive = false;
     }
 }

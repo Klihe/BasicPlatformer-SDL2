@@ -6,11 +6,9 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.y = y;
     self.prevX = self.x;
     self.prevY = self.y;
-
     self.width = width;
     self.height = height;
-    self.defaultWidth = self.width;
-    self.defaultHeight = self.height;
+    self.rect = (SDL_Rect){self.x, self.y, self.width, self.height};
 
     self.faceDirection = FACE_RIGHT;
     self.location = MAP1;
@@ -38,23 +36,28 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.onOpenChest = false;
 
     self.attack1Active = false;
+    self.attack1Damage = 10;
     self.attack1Timer = 0;
     self.attack1Cooldown = 500;
-    self.attack1Duration = 100;
+    self.attack1Duration = 1;
+    self.attack1Rect = (SDL_Rect){0, 0, 0, 0};
 
-    self.attack2Active = false; 
+    self.attack2Active = false;
+    self.attack2Damage = 5; 
     self.attack2Timer = 0;
     self.attack2Cooldown = 1000;
-    self.attack2Duration = 100;
+    self.attack2Duration = 1;
+    self.attack2Rect_left = (SDL_Rect){0, 0, 0, 0};
+    self.attack2Rect_right = (SDL_Rect){0, 0, 0, 0};
 
     return self;
 };
 
 void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture) {
     if (self->faceDirection == FACE_LEFT)
-        SDL_RenderCopy(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+        SDL_RenderCopy(renderer, texture, NULL, &self->rect);
     else if (self->faceDirection == FACE_RIGHT)
-        SDL_RenderCopyEx(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height}, 0, NULL, SDL_FLIP_HORIZONTAL);
+        SDL_RenderCopyEx(renderer, texture, NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
 }
 
 void movePlayer(Player* self, const Uint8* state) {
@@ -117,7 +120,7 @@ void handlePlayerCollision(Player* self, Map* map) {
                 self->y + self->height > tileRect.y) {
                 if (map->tiles[j][i] == TILE_SOLID){
                     self->isFalling = false;
-                    int result = getCollisionValue(&(SDL_Rect){self->x, self->y, self->width, self->height}, &tileRect);
+                    int result = getCollisionValue(&self->rect, &tileRect);
                     self->isFalling = !result;
                     if (result > 20) {
                         self->y = self->prevY;
@@ -161,7 +164,7 @@ void handlePlayerCollision(Player* self, Map* map) {
 }
 
 void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time) {
-    SDL_Rect rect = {self->x - self->width, self->y, self->width * 3, self->height};
+    self->attack1Rect = (SDL_Rect){self->x - self->width, self->y, self->width * 3, self->height};
     if (state[self->attack1Key] && time - self->attack1Timer > self->attack1Cooldown) {
         self->attack1Active = true;
         self->attack1Timer = time;
@@ -169,7 +172,7 @@ void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uin
     }
     else if (self->attack1Active) {
         SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &self->attack1Rect);
         if (time - self->attack1Timer > self->attack1Duration) {
             self->attack1Active = false;
             self->speedMultiplier = 1;
@@ -178,8 +181,8 @@ void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uin
 }
 
 void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time) {
-    SDL_Rect rectLeft = {0, self->y + self->height/3, self->x, self->height - self->width};
-    SDL_Rect rectRight = {self->x + self->width, self->y + self->height/3, WINDOW_WIDTH - self->x, self->height - self->width};
+    self->attack2Rect_left = (SDL_Rect){0, self->y + self->height/3, self->x, self->height - self->width};
+    self->attack2Rect_right = (SDL_Rect){self->x + self->width, self->y + self->height/3, WINDOW_WIDTH - self->x, self->height - self->width};
     if (state[self->attack2Key] && time - self->attack2Timer > self->attack2Cooldown) {
         self->attack2Active = true;
         self->attack2Timer = time;
@@ -188,12 +191,16 @@ void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uin
     else if (self->attack2Active) {
         SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
         if (self->faceDirection == FACE_LEFT)
-            SDL_RenderFillRect(renderer, &rectLeft);
+            SDL_RenderFillRect(renderer, &self->attack2Rect_left);
         else if (self->faceDirection == FACE_RIGHT)
-            SDL_RenderFillRect(renderer, &rectRight);
+            SDL_RenderFillRect(renderer, &self->attack2Rect_right);
         if (time - self->attack2Timer > self->attack2Duration) {
             self->attack2Active = false;
             self->speedMultiplier = 1;
         }
     }
+}
+
+void updatePlayer(Player* self) {
+    self->rect = (SDL_Rect){self->x, self->y, self->width, self->height};
 }
