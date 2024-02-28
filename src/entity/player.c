@@ -58,10 +58,7 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
 };
 
 void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture* texture) {
-    SDL_Rect rect = {self->x, self->y, self->width, self->height};
-    //SDL_SetRenderDrawColor(renderer, self->colorR, self->colorG, self->colorB, self->colorA);
-    //SDL_RenderFillRect(renderer, &rect);
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_RenderCopy(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
 }
 
 void movePlayer(Player* self, const Uint8* state) {
@@ -71,16 +68,8 @@ void movePlayer(Player* self, const Uint8* state) {
 
     if (state[self->sprintKey] && !(state[self->upKey] && self->onLadder) && !(state[self->downKey] && self->onLadder)) {
         self->speedMultiplier = 1.5;
-        if (self->height != self->defaultHeight * 1.25) {
-            self->y -= self->defaultHeight * 0.25;
-            self->height = self->defaultHeight * 1.25;
-        }
     } else {
         self->speedMultiplier = 1;
-        if (self->height != self->defaultHeight) {
-            self->y += self->defaultHeight * 0.25;
-            self->height = self->defaultHeight;
-        }
     }
     if (state[self->leftKey] && self->x > 0) {
         self->x -= self->speed;

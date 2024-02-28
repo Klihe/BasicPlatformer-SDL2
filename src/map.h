@@ -25,6 +25,6 @@ typedef struct {
 
 
 // map's functions
-void drawMap(Map *map, SDL_Renderer* renderer);
+void drawMap(Map *map, SDL_Renderer* renderer, SDL_Texture* texture_block_ladder, SDL_Texture* texture_block_solid, SDL_Texture* texture_block_foward, SDL_Texture* texture_block_backward, SDL_Texture* texture_block_treasure);
 
 #endif

@@ -41,16 +41,28 @@ int main() {
         return 1;
     }
 
-    SDL_Surface* surface = IMG_Load("src/img/player.png");
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_main, surface);
+    SDL_Surface* surface_player_idle = IMG_Load("src/img/player/player_idle.png");
+    SDL_Texture* texture_player_idle = SDL_CreateTextureFromSurface(renderer_main, surface_player_idle);
+    SDL_Surface* surface_enemy_idle = IMG_Load("src/img/enemy/enemy_idle.png");
+    SDL_Texture* texture_enemy_idle = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_idle);
+    SDL_Surface* surface_block_ladder = IMG_Load("src/img/ladder.png");
+    SDL_Texture* texture_block_ladder = SDL_CreateTextureFromSurface(renderer_main, surface_block_ladder);
+    SDL_Surface* surface_block_solid = IMG_Load("src/img/cobble.png");
+    SDL_Texture* texture_block_solid = SDL_CreateTextureFromSurface(renderer_main, surface_block_solid);
+    SDL_Surface* surface_block_foward = IMG_Load("src/img/portal_foward.png");
+    SDL_Texture* texture_block_foward = SDL_CreateTextureFromSurface(renderer_main, surface_block_foward);
+    SDL_Surface* surface_block_backward = IMG_Load("src/img/portal_backward.png");
+    SDL_Texture* texture_block_backward = SDL_CreateTextureFromSurface(renderer_main, surface_block_backward);
+    SDL_Surface* surface_block_treasure = IMG_Load("src/img/treasure.png");
+    SDL_Texture* texture_block_treasure = SDL_CreateTextureFromSurface(renderer_main, surface_block_treasure);
 
     // create player and map
-    Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-140+1, 40, 60, 5);
-    Enemy enemy[5] = {createEnemy(14, 6, 40, 60, 3, 14, 11),
-                      createEnemy(2, 5, 40, 60, 3, 7, 1),
-                      createEnemy(6, 5, 40, 60, 3, 7, 1),
-                      createEnemy(7, 3, 40, 60, 3, 12, 7),
-                      createEnemy(1, 2, 40, 60, 3, 4, 1)};
+    Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-160+1, 60, 80, 5);
+    Enemy enemy[5] = {createEnemy(14, 6, 60, 80, 3, 14, 11),
+                      createEnemy(2, 5, 60, 80, 3, 7, 1),
+                      createEnemy(6, 5, 60, 80, 3, 7, 1),
+                      createEnemy(7, 3, 60, 80, 3, 12, 7),
+                      createEnemy(1, 2, 60, 80, 3, 4, 1)};
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
                 {0,4,0,3,0,0,0,0,0,2,1,1,1,1,1,0},
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
@@ -86,27 +98,27 @@ int main() {
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
         // clear screen
-        SDL_SetRenderDrawColor(renderer_main, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer_main, 100, 100, 100, 255);
         SDL_RenderClear(renderer_main);
         
         // handle player collision
         if (player.location == MAP1) {
-            drawMap(&map1, renderer_main);
+            drawMap(&map1, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
             handlePlayerCollision(&player, &map1);
             for (int i = 0; i < 5; i++) {
-                drawEnemy(&enemy[i], renderer_main);
+                drawEnemy(&enemy[i], renderer_main, texture_enemy_idle);
                 moveEnemy(&enemy[i], player.x, player.y);
             }
         }
         else if (player.location == MAP2) {
-            drawMap(&map2, renderer_main);
+            drawMap(&map2, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
             handlePlayerCollision(&player, &map2);
         }
 
         // draw player
         attack1Player(&player, state, renderer_main, time);
         attack2Player(&player, state, renderer_main, time);
-        drawPlayer(&player, renderer_main, texture);
+        drawPlayer(&player, renderer_main, texture_player_idle);
         movePlayer(&player, state);
 
         openChestPlayer(&player, state, renderer_main);
@@ -117,8 +129,8 @@ int main() {
     }
     
     // clean up
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture_player_idle);
+    SDL_FreeSurface(surface_player_idle);
     SDL_DestroyRenderer(renderer_main);
     SDL_DestroyWindow(window_main);
     SDL_Quit();
