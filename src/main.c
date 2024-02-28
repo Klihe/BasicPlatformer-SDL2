@@ -101,7 +101,6 @@ int main() {
         Uint32 time = SDL_GetTicks();
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
-        //SDL_FreeSurface(surface_background);
         // clear screen
         SDL_RenderCopy(renderer_main, texture_background, NULL, NULL);
         

@@ -14,6 +14,7 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.location = MAP1;
 
     self.isFalling = true;
+    self.fallingSpeed = 0;
     self.defaultSpeed = speed;
     self.speedMultiplier = 1;
     self.speed = self.defaultSpeed * self.speedMultiplier;
@@ -26,12 +27,10 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
 
     self.attack1Key = SDL_SCANCODE_E;
     self.attack2Key = SDL_SCANCODE_Q;
-
     self.interactKey = SDL_SCANCODE_SPACE;
 
     self.onLadder = false;
     self.onLadderDown = false;
-    
     self.onChest = false;
     self.onOpenChest = false;
 
@@ -120,6 +119,7 @@ void handlePlayerCollision(Player* self, Map* map) {
                 self->y + self->height > tileRect.y) {
                 if (map->tiles[j][i] == TILE_SOLID){
                     self->isFalling = false;
+                    self->fallingSpeed = 0;
                     int result = getCollisionValue(&self->rect, &tileRect);
                     self->isFalling = !result;
                     if (result > 20) {
@@ -132,6 +132,7 @@ void handlePlayerCollision(Player* self, Map* map) {
                     }
                 }
                 else if (map->tiles[j][i] == TILE_LADDER){
+                    self->fallingSpeed = 0;
                     self->isFalling = false;
                     self->onLadder = true;
                 }
@@ -140,16 +141,19 @@ void handlePlayerCollision(Player* self, Map* map) {
                     self->onLadderDown = true;
                 }
                 else if (map->tiles[j][i] == TILE_TREAUSURE){
+                    self->fallingSpeed = 0;
                     self->onChest = true;
                     self->isFalling = false;
                 }
                 else if (map->tiles[j][i] == TILE_PORTAL_FOWARD){
+                    self->fallingSpeed = 0;
                     self->isFalling = false;
                     self->location = self->location +1;
                     self->x = 0;
                     self->y = WINDOW_HEIGHT - 140;
                 }
                 else if (map->tiles[j][i] == TILE_PORTAL_BACKWARD){
+                    self->fallingSpeed = 0;
                     self->isFalling = false;
                     self->location = self->location -1;
                     self->x = WINDOW_WIDTH - 40;
@@ -159,7 +163,8 @@ void handlePlayerCollision(Player* self, Map* map) {
         }
     }
     if (self->isFalling) {
-        self->y += 5;
+        self->fallingSpeed += 1;
+        self->y += self->fallingSpeed;
     }
 }
 

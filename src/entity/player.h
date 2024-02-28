@@ -18,7 +18,6 @@ typedef struct Player {
 
     bool isFalling;
     int fallingSpeed;
-
     int defaultSpeed;
     float speedMultiplier;
     int speed;
@@ -31,12 +30,10 @@ typedef struct Player {
 
     SDL_Scancode attack1Key;
     SDL_Scancode attack2Key;
-
     SDL_Scancode interactKey;
 
     bool onLadder;
     bool onLadderDown;
-
     bool onChest;
     bool onOpenChest;
 
