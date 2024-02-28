@@ -9,6 +9,7 @@
 #include "entity/player.h"
 #include "entity/enemy.h"
 #include "map.h"
+#include "UI/ui.h"
 
 // main function
 int main() {
@@ -133,6 +134,7 @@ int main() {
         drawPlayer(&player, renderer_main, texture_player_left);
         movePlayer(&player, state);
         updatePlayer(&player);
+        healthBar(renderer_main, player.health);
 
         openChestPlayer(&player, state, renderer_main);
 
