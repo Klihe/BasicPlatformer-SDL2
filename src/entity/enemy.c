@@ -36,8 +36,13 @@ Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, 
     return self;
 }
 
-void drawEnemy(Enemy* self, SDL_Renderer* renderer, SDL_Texture* texture) {
-    SDL_RenderCopy(renderer, texture, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+void drawEnemy(Enemy* self, SDL_Renderer* renderer, SDL_Texture* texture_left, SDL_Texture* texture_right) {
+    if (self->faceDirection == FACE_LEFT) {
+        SDL_RenderCopy(renderer, texture_left, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+    } else {
+        SDL_RenderCopy(renderer, texture_right, NULL, &(SDL_Rect){self->x, self->y, self->width, self->height});
+    }
+    
 }
 
 void moveEnemy(Enemy* self, int playerX, int playerY) {

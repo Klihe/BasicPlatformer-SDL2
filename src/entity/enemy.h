@@ -38,7 +38,7 @@ typedef struct Enemy {
 } Enemy;
 
 Enemy createEnemy(int x, int y, int width, int height, int speed, int moveFrom, int moveTo);
-void drawEnemy(Enemy* enemy, SDL_Renderer* renderer, SDL_Texture* texture);
+void drawEnemy(Enemy* enemy, SDL_Renderer* renderer, SDL_Texture* texture_left, SDL_Texture* texture_right);
 void moveEnemy(Enemy* enemy, int playerX, int playerY);
 
 #endif // ENEMY_H

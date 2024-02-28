@@ -43,8 +43,10 @@ int main() {
 
     SDL_Surface* surface_player_idle = IMG_Load("src/img/player/player_idle.png");
     SDL_Texture* texture_player_idle = SDL_CreateTextureFromSurface(renderer_main, surface_player_idle);
-    SDL_Surface* surface_enemy_idle = IMG_Load("src/img/enemy/enemy_idle.png");
-    SDL_Texture* texture_enemy_idle = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_idle);
+    SDL_Surface* surface_enemy_left = IMG_Load("src/img/enemy/enemy_left.png");
+    SDL_Texture* texture_enemy_left = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_left);
+    SDL_Surface* surface_enemy_right = IMG_Load("src/img/enemy/enemy_right.png");
+    SDL_Texture* texture_enemy_right = SDL_CreateTextureFromSurface(renderer_main, surface_enemy_right);
     SDL_Surface* surface_block_ladder = IMG_Load("src/img/ladder.png");
     SDL_Texture* texture_block_ladder = SDL_CreateTextureFromSurface(renderer_main, surface_block_ladder);
     SDL_Surface* surface_block_solid = IMG_Load("src/img/cobble.png");
@@ -57,7 +59,7 @@ int main() {
     SDL_Texture* texture_block_treasure = SDL_CreateTextureFromSurface(renderer_main, surface_block_treasure);
 
     // create player and map
-    Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-160+1, 60, 80, 5);
+    Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-160+1, 44, 64, 5);
     Enemy enemy[5] = {createEnemy(14, 6, 60, 80, 3, 14, 11),
                       createEnemy(2, 5, 60, 80, 3, 7, 1),
                       createEnemy(6, 5, 60, 80, 3, 7, 1),
@@ -78,8 +80,8 @@ int main() {
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6},
+                {0,2,1,1,1,1,1,1,1,1,1,1,1,2,0,0},
+                {0,2,0,0,0,0,0,0,0,0,0,0,0,2,0,6},
                 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}};
 
     // game loop
@@ -106,7 +108,7 @@ int main() {
             drawMap(&map1, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
             handlePlayerCollision(&player, &map1);
             for (int i = 0; i < 5; i++) {
-                drawEnemy(&enemy[i], renderer_main, texture_enemy_idle);
+                drawEnemy(&enemy[i], renderer_main, texture_enemy_left, texture_enemy_right);
                 moveEnemy(&enemy[i], player.x, player.y);
             }
         }
