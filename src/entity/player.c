@@ -17,6 +17,8 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.location = MAP1;
 
     self.isFalling = true;
+    self.isJumping = false;
+    self.jumpSpeed = 10;
     self.isMoving = false;
     self.fallingSpeed = 0;
     self.defaultSpeed = speed;
@@ -32,10 +34,11 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.leftKey = SDL_SCANCODE_A;
     self.rightKey = SDL_SCANCODE_D;
     self.sprintKey = SDL_SCANCODE_LSHIFT;
+    self.jumpKey = SDL_SCANCODE_SPACE;
 
     self.attack1Key = SDL_SCANCODE_E;
     self.attack2Key = SDL_SCANCODE_Q;
-    self.interactKey = SDL_SCANCODE_SPACE;
+    self.interactKey = SDL_SCANCODE_F;
 
     self.onLadder = false;
     self.onLadderDown = false;
@@ -43,7 +46,7 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.onOpenChest = false;
 
     self.attack1Active = false;
-    self.attack1Damage = 10;
+    self.attack1Damage = 5;
     self.attack1Timer = 0;
     self.attack1Cooldown = 500;
     self.attack1Duration = 1;
@@ -92,6 +95,20 @@ void movePlayer(Player* self, const Uint8* state) {
         self->speedMultiplier = 1.5;
     } else {
         self->speedMultiplier = 1;
+    }
+    if (!self->isJumping) {
+        if (state[self->jumpKey]) {
+            self->isJumping = true;
+            self->jumpSpeed = 20;
+        }
+    } else {
+        if (self->jumpSpeed >= -5) {
+            self->y -= (self->jumpSpeed * abs(self->jumpSpeed)) * 0.025;
+            self->jumpSpeed -= 1;
+        } else {
+            self->jumpSpeed = 5;
+            self->isJumping = false;
+        }
     }
     if (state[self->leftKey] && self->x > 0) {
         self->x -= self->speed;

@@ -20,6 +20,8 @@ typedef struct Player {
     enum Location location;
 
     bool isFalling;
+    bool isJumping;
+    int jumpSpeed;
     bool isMoving;
     int fallingSpeed;
     int defaultSpeed;
@@ -35,6 +37,7 @@ typedef struct Player {
     SDL_Scancode leftKey;
     SDL_Scancode rightKey;
     SDL_Scancode sprintKey;
+    SDL_Scancode jumpKey;
 
     SDL_Scancode attack1Key;
     SDL_Scancode attack2Key;
