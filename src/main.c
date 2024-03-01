@@ -10,6 +10,7 @@
 #include "entity/enemy.h"
 #include "map.h"
 #include "UI/ui.h"
+#include "state.h"
 
 // main function
 int main() {
@@ -75,6 +76,7 @@ int main() {
     SDL_Surface* surface_block_treasure = IMG_Load("src/img/treasure.png");
     SDL_Texture* texture_block_treasure = SDL_CreateTextureFromSurface(renderer_main, surface_block_treasure);
 
+    enum State game_state = MENU;
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-160+1, 44, 64, 5);
     Enemy enemy[5] = {createEnemy(14, 6, 56, 64, 3, 14, 11),
@@ -119,35 +121,49 @@ int main() {
         // clear screen
         SDL_RenderCopy(renderer_main, texture_background, NULL, NULL);
         
-        // handle player collision
-        if (player.location == MAP1) {
-            drawMap(&map1, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
-            handlePlayerCollision(&player, &map1);
-            for (int i = 0; i < 5; i++) {
-                drawEnemy(&enemy[i], renderer_main, texture_enemy, time);
-                moveEnemy(&enemy[i], player.x, player.y);
-                enemy[i].health -= attackCollision(&player.attack1Rect, &enemy[i].rect, player.attack1Active, player.attack1Damage);
-                enemy[i].health -= attackCollision(&player.attack2Rect_left, &enemy[i].rect, player.attack2Active, player.attack2Damage);
-                enemy[i].health -= attackCollision(&player.attack2Rect_right, &enemy[i].rect, player.attack2Active, player.attack2Damage);
-                updateEnemy(&enemy[i]);
-                player.health -= attackCollision(&enemy[i].attackRect, &player.rect, enemy[i].attackActive, enemy[i].attackDamage);
-            }
+        switch (game_state) {
+            case MENU:
+                game_state = menu(renderer_main, state);
+                break;
+            case GAME:
+                if (state[SDL_SCANCODE_ESCAPE]) game_state = PAUSE;
+                if (player.health <= 0) game_state = GAMEOVER;
+                switch (player.location) {
+                    case MAP1:
+                        drawMap(&map1, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
+                        handlePlayerCollision(&player, &map1);
+                        for (int i = 0; i < 5; i++) {
+                            drawEnemy(&enemy[i], renderer_main, texture_enemy, time);
+                            moveEnemy(&enemy[i], player.x, player.y);
+                            enemy[i].health -= attackCollision(&player.attack1Rect, &enemy[i].rect, player.attack1Active, player.attack1Damage);
+                            enemy[i].health -= attackCollision(&player.attack2Rect_left, &enemy[i].rect, player.attack2Active, player.attack2Damage);
+                            enemy[i].health -= attackCollision(&player.attack2Rect_right, &enemy[i].rect, player.attack2Active, player.attack2Damage);
+                            updateEnemy(&enemy[i]);
+                            player.health -= attackCollision(&enemy[i].attackRect, &player.rect, enemy[i].attackActive, enemy[i].attackDamage);
+                        }
+                        break;
+                    case MAP2:
+                        drawMap(&map2, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
+                        handlePlayerCollision(&player, &map2);
+                        break;
+                }
+                // draw player
+                attack1Player(&player, state, renderer_main, time);
+                attack2Player(&player, state, renderer_main, time);
+                drawPlayer(&player, renderer_main, texture_player, time);
+                movePlayer(&player, state);
+                updatePlayer(&player);
+                healthBar(renderer_main, player.health);
+
+                openChestPlayer(&player, state, renderer_main);
+                break;
+            case PAUSE:
+                game_state = pause(renderer_main, state);
+                break;
+            case GAMEOVER:
+                game_state = game_over(renderer_main, state);
+                break;
         }
-        else if (player.location == MAP2) {
-            drawMap(&map2, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
-            handlePlayerCollision(&player, &map2);
-        }
-
-        // draw player
-        attack1Player(&player, state, renderer_main, time);
-        attack2Player(&player, state, renderer_main, time);
-        drawPlayer(&player, renderer_main, texture_player, time);
-        movePlayer(&player, state);
-        updatePlayer(&player);
-        healthBar(renderer_main, player.health);
-
-        openChestPlayer(&player, state, renderer_main);
-
         // present renderer
         SDL_RenderPresent(renderer_main);
         SDL_Delay(1000/60);

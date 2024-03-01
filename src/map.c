@@ -27,3 +27,5 @@ void drawMap(Map* map, SDL_Renderer* renderer, SDL_Texture* texture_block_ladder
         }
     }
 }
+
+void getInfoMap();
