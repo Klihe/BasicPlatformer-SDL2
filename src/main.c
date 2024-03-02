@@ -45,6 +45,7 @@ int main() {
     }
 
     SDL_Texture* img_background = loadTexture("src/img/background.png", renderer_main);
+    SDL_Texture* img_gameover = loadTexture("src/img/gameover.png", renderer_main);
     SDL_Texture* img_block_ladder = loadTexture("src/img/ladder.png", renderer_main);
     SDL_Texture* img_block_solid = loadTexture("src/img/cobble.png", renderer_main);
     SDL_Texture* img_block_foward = loadTexture("src/img/portal_foward.png", renderer_main);

@@ -50,6 +50,7 @@ typedef struct Player {
     bool inventoryOpen;
     bool onLadder;
     bool onLadderDown;
+    bool onLava;
     bool onChest;
     bool onOpenChest;
 

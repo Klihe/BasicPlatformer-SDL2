@@ -47,6 +47,7 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.inventoryOpen = false;
     self.onLadder = false;
     self.onLadderDown = false;
+    self.onLava = false;
     self.onChest = false;
     self.onOpenChest = false;
 
@@ -87,6 +88,11 @@ void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uin
         else if (self->faceDirection == FACE_RIGHT) {
             SDL_RenderCopyEx(renderer, texture[0], NULL, &self->rect, 0, NULL, SDL_FLIP_HORIZONTAL);
         }
+    }
+    if (self->onLava) {
+        SDL_SetTextureColorMod(texture[0], 255, 0, 0);
+    } else {
+        SDL_SetTextureColorMod(texture[0], 255, 255, 255);
     }
 }
 
@@ -184,6 +190,7 @@ void handlePlayerCollision(Player* self, Map* map) {
     self->onLadderDown = false;
     self->onChest = false;
     self->isFalling = true;
+    self->onLava = false;
 
     for (int i = 0; i < MAP_WIDTH; i++) {
         for (int j = 0; j < MAP_HEIGHT; j++) {
@@ -233,6 +240,11 @@ void handlePlayerCollision(Player* self, Map* map) {
                     self->location = self->location -1;
                     self->x = WINDOW_WIDTH - 40;
                     self->y = WINDOW_HEIGHT - 140;
+                }
+                else if (map->tiles[j][i] == TILE_LAVA){
+                    self->health -= 1;
+                    self->onLava = true;
+                    self->isFalling = false;
                 }
             }
         }

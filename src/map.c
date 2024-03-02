@@ -10,6 +10,8 @@ void drawMap(Map* map, SDL_Renderer* renderer, SDL_Texture* ladder, SDL_Texture*
                 case TILE_SOLID:
                     SDL_RenderCopy(renderer, solid, NULL, &(SDL_Rect){i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE});
                     break;
+                case TILE_LADDER_DOWN:
+                    break;
                 case TILE_LADDER:
                     SDL_RenderCopy(renderer, ladder, NULL, &(SDL_Rect){i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE});
                     break;
