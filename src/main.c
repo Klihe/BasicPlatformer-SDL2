@@ -6,6 +6,7 @@
 
 // include files
 #include "config.h"
+#include "texture.h"
 #include "entity/player.h"
 #include "entity/enemy.h"
 #include "map.h"
@@ -43,38 +44,22 @@ int main() {
         return 1;
     }
 
-    SDL_Surface* surface_background = IMG_Load("src/img/background.png");
-    SDL_Texture* texture_background = SDL_CreateTextureFromSurface(renderer_main, surface_background);
+    SDL_Texture* img_background = loadTexture("src/img/background.png", renderer_main);
+    SDL_Texture* img_block_ladder = loadTexture("src/img/ladder.png", renderer_main);
+    SDL_Texture* img_block_solid = loadTexture("src/img/cobble.png", renderer_main);
+    SDL_Texture* img_block_foward = loadTexture("src/img/portal_foward.png", renderer_main);
+    SDL_Texture* img_block_backward = loadTexture("src/img/portal_backward.png", renderer_main);
+    SDL_Texture* img_block_treasure = loadTexture("src/img/treasure.png", renderer_main);
 
-    SDL_Surface* surface_player[4] = {IMG_Load("src/img/player/player_1.png"),
-                                      IMG_Load("src/img/player/player_2.png"),
-                                      IMG_Load("src/img/player/player_3.png"),
-                                      IMG_Load("src/img/player/player_4.png")};
-    SDL_Texture* texture_player[4] = {SDL_CreateTextureFromSurface(renderer_main, surface_player[0]),
-                                        SDL_CreateTextureFromSurface(renderer_main, surface_player[1]),
-                                        SDL_CreateTextureFromSurface(renderer_main, surface_player[2]),
-                                        SDL_CreateTextureFromSurface(renderer_main, surface_player[3])};
+    SDL_Texture* img_player[4] = {loadTexture("src/img/player/player_1.png", renderer_main),
+                                  loadTexture("src/img/player/player_2.png", renderer_main),
+                                  loadTexture("src/img/player/player_3.png", renderer_main),
+                                  loadTexture("src/img/player/player_4.png", renderer_main)};
 
-    SDL_Surface* surface_enemy[4] = {IMG_Load("src/img/enemy/enemy_1.png"),
-                                      IMG_Load("src/img/enemy/enemy_2.png"),
-                                      IMG_Load("src/img/enemy/enemy_3.png"),
-                                      IMG_Load("src/img/enemy/enemy_4.png")};
-    
-    SDL_Texture* texture_enemy[4] = {SDL_CreateTextureFromSurface(renderer_main, surface_enemy[0]),
-                                        SDL_CreateTextureFromSurface(renderer_main, surface_enemy[1]),
-                                        SDL_CreateTextureFromSurface(renderer_main, surface_enemy[2]),
-                                        SDL_CreateTextureFromSurface(renderer_main, surface_enemy[3])};
-
-    SDL_Surface* surface_block_ladder = IMG_Load("src/img/ladder.png");
-    SDL_Texture* texture_block_ladder = SDL_CreateTextureFromSurface(renderer_main, surface_block_ladder);
-    SDL_Surface* surface_block_solid = IMG_Load("src/img/cobble.png");
-    SDL_Texture* texture_block_solid = SDL_CreateTextureFromSurface(renderer_main, surface_block_solid);
-    SDL_Surface* surface_block_foward = IMG_Load("src/img/portal_foward.png");
-    SDL_Texture* texture_block_foward = SDL_CreateTextureFromSurface(renderer_main, surface_block_foward);
-    SDL_Surface* surface_block_backward = IMG_Load("src/img/portal_backward.png");
-    SDL_Texture* texture_block_backward = SDL_CreateTextureFromSurface(renderer_main, surface_block_backward);
-    SDL_Surface* surface_block_treasure = IMG_Load("src/img/treasure.png");
-    SDL_Texture* texture_block_treasure = SDL_CreateTextureFromSurface(renderer_main, surface_block_treasure);
+    SDL_Texture* img_enemy[4] = {loadTexture("src/img/enemy/enemy_1.png", renderer_main),
+                                 loadTexture("src/img/enemy/enemy_2.png", renderer_main),
+                                 loadTexture("src/img/enemy/enemy_3.png", renderer_main),
+                                 loadTexture("src/img/enemy/enemy_4.png", renderer_main)};                             
 
     enum State game_state = MENU;
     // create player and map
@@ -119,7 +104,7 @@ int main() {
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
         // clear screen
-        SDL_RenderCopy(renderer_main, texture_background, NULL, NULL);
+        SDL_RenderCopy(renderer_main, img_background, NULL, NULL);
         
         switch (game_state) {
             case MENU:
@@ -136,10 +121,10 @@ int main() {
                 if (player.health <= 0) game_state = GAMEOVER;
                 switch (player.location) {
                     case MAP1:
-                        drawMap(&map1, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
+                        drawMap(&map1, renderer_main, img_block_ladder, img_block_solid, img_block_foward, img_block_backward, img_block_treasure);
                         handlePlayerCollision(&player, &map1);
                         for (int i = 0; i < 5; i++) {
-                            drawEnemy(&enemy[i], renderer_main, texture_enemy, time);
+                            drawEnemy(&enemy[i], renderer_main, img_enemy, time);
                             moveEnemy(&enemy[i], player.x, player.y);
                             enemy[i].health -= attackCollision(&player.attack1Rect, &enemy[i].rect, player.attack1Active, player.attack1Damage);
                             enemy[i].health -= attackCollision(&player.attack2Rect_left, &enemy[i].rect, player.attack2Active, player.attack2Damage);
@@ -149,14 +134,14 @@ int main() {
                         }
                         break;
                     case MAP2:
-                        drawMap(&map2, renderer_main, texture_block_ladder, texture_block_solid, texture_block_foward, texture_block_backward, texture_block_treasure);
+                        drawMap(&map2, renderer_main, img_block_ladder, img_block_solid, img_block_foward, img_block_backward, img_block_treasure);
                         handlePlayerCollision(&player, &map2);
                         break;
                 }
                 // draw player
                 attack1Player(&player, state, renderer_main, time);
                 attack2Player(&player, state, renderer_main, time);
-                drawPlayer(&player, renderer_main, texture_player, time);
+                drawPlayer(&player, renderer_main, img_player, time);
                 movePlayer(&player, state);
                 updatePlayer(&player);
                 healthBar(renderer_main, player.health);
