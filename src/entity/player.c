@@ -104,7 +104,7 @@ void movePlayer(Player* self, const Uint8* state) {
     self->isMoving = false;
 
     // other movement
-    if (state[self->sprintKey] && !(state[self->upKey] && self->onLadder) && !(state[self->downKey] && self->onLadder)) {
+    if (state[self->sprintKey] && !(state[self->upKey] && self->onLadder) && !(state[self->downKey] && self->onLadder && !self->onLava)) {
         self->speedMultiplier = 1.5;
     } else {
         self->speedMultiplier = 1;
@@ -116,7 +116,7 @@ void movePlayer(Player* self, const Uint8* state) {
         }
     } else {
         if (self->jumpSpeed >= -5) {
-            self->y -= (self->jumpSpeed * abs(self->jumpSpeed)) * 0.025;
+            self->y -= (self->jumpSpeed * abs(self->jumpSpeed)) * 0.03;
             self->jumpSpeed -= 1;
         } else {
             self->jumpSpeed = 5;
@@ -245,6 +245,7 @@ void handlePlayerCollision(Player* self, Map* map) {
                     self->health -= 1;
                     self->onLava = true;
                     self->isFalling = false;
+                    self->speedMultiplier = 0.5;
                 }
             }
         }

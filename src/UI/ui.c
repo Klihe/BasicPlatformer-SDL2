@@ -10,12 +10,13 @@ void healthBar(SDL_Renderer* renderer, int health) {
     SDL_RenderFillRect(renderer, &healthBar);
 }
 
-bool button(SDL_Renderer* renderer, Uint32 mouse_state, int size[2], int position[2]) {
+bool button(SDL_Renderer* renderer, Uint32 mouse_state, int size[2], int position[2], SDL_Texture* texture) {
     SDL_Rect button = {position[0], position[1], size[0], size[1]};
     int x, y;
     SDL_GetMouseState(&x, &y);
+    SDL_RenderCopy(renderer, texture, NULL, &button);
     if (mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-        SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+        SDL_SetTextureColorMod(texture, 150, 150, 150);
         SDL_RenderFillRect(renderer, &button);
         if (pointRectCollision(x, y, &button)) {
             return true;
@@ -24,11 +25,10 @@ bool button(SDL_Renderer* renderer, Uint32 mouse_state, int size[2], int positio
         }
     } else {
         if (pointRectCollision(x, y, &button)) {
-            SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
+            SDL_SetTextureColorMod(texture, 200, 200, 200);
         } else {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_SetTextureColorMod(texture, 255, 255, 255);
         }
-        SDL_RenderFillRect(renderer, &button);
         return false;
     }
 }
