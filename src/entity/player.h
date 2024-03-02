@@ -29,7 +29,7 @@ typedef struct Player {
     int speed;
 
     int frame;
-    Uint32 frameDelay;
+    Uint8 frameDelay;
     Uint32 frameNext;
 
     SDL_Scancode upKey;
@@ -42,7 +42,12 @@ typedef struct Player {
     SDL_Scancode attack1Key;
     SDL_Scancode attack2Key;
     SDL_Scancode interactKey;
+    SDL_Scancode inventoryKey;
 
+    Uint8 buttonCooldown;
+    Uint32 buttonTimer;
+
+    bool inventoryOpen;
     bool onLadder;
     bool onLadderDown;
     bool onChest;
@@ -67,7 +72,7 @@ typedef struct Player {
 Player createPlayer(int x, int y, int width, int height, int speed);
 void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time);
 void movePlayer(Player* self, const Uint8* state);
-void openChestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer);
+void chestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);
 void handlePlayerCollision(Player* self, Map* map);
 void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);
 void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);

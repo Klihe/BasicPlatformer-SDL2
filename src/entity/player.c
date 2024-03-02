@@ -39,7 +39,12 @@ Player createPlayer(int x, int y, int width, int height, int speed) {
     self.attack1Key = SDL_SCANCODE_E;
     self.attack2Key = SDL_SCANCODE_Q;
     self.interactKey = SDL_SCANCODE_F;
+    self.inventoryKey = SDL_SCANCODE_I;
 
+    self.buttonCooldown = 100;
+    self.buttonTimer = 0;
+
+    self.inventoryOpen = false;
     self.onLadder = false;
     self.onLadderDown = false;
     self.onChest = false;
@@ -86,11 +91,13 @@ void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uin
 }
 
 void movePlayer(Player* self, const Uint8* state) {
+    // update values
     self->prevX = self->x;
     self->prevY = self->y;
     self->speed = self->defaultSpeed * self->speedMultiplier;
     self->isMoving = false;
 
+    // other movement
     if (state[self->sprintKey] && !(state[self->upKey] && self->onLadder) && !(state[self->downKey] && self->onLadder)) {
         self->speedMultiplier = 1.5;
     } else {
@@ -110,6 +117,8 @@ void movePlayer(Player* self, const Uint8* state) {
             self->isJumping = false;
         }
     }
+
+    // basic movement
     if (state[self->leftKey] && self->x > 0) {
         self->x -= self->speed;
         self->faceDirection = FACE_LEFT;
@@ -120,30 +129,51 @@ void movePlayer(Player* self, const Uint8* state) {
         self->faceDirection = FACE_RIGHT;
         self->isMoving = true;
     }
-    if (state[self->upKey] && self->onLadder == true) {
+    if (state[self->upKey] && self->onLadder) {
         self->y -= self->speed;
         self->speedMultiplier = 0.75;
         self->isMoving = true;
     }
-    if (state[self->downKey] && (self->onLadder == true || self->onLadderDown == true)) {
+    if (state[self->downKey] && (self->onLadder || self->onLadderDown)) {
         self->y += self->speed;
         self->speedMultiplier = 0.5;
         self->isMoving = true;
     }
 }
 
-void openChestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer) {
-    SDL_Rect rect = {WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 - 100, 200, 200};
-    if (state[self->interactKey] && self->onChest) {
-        SDL_Delay(100);
-        if (!self->onOpenChest) {
-            self->onOpenChest = true;
-        }
-        else {
-            self->onOpenChest = false;
-        }
-    } 
+void chestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time) {
+    if (time > self->buttonTimer + self->buttonCooldown) {
+        if (state[self->interactKey] && self->onChest) {
+            if (!self->onOpenChest) {
+                self->onOpenChest = true;
+            }
+            else {
+                self->onOpenChest = false;
+            }
+            self->buttonTimer = time;
+        } 
+    }
     if (self->onOpenChest && self->onChest) {
+        SDL_Rect rect = {WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 - 100, 200, 200};
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+}
+
+void inventoryPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time) {
+    if (time > self->buttonTimer + self->buttonCooldown) {
+        if (state[self->inventoryKey]) {
+            if (!self->inventoryOpen) {
+                self->inventoryOpen = true;
+            }
+            else {
+                self->inventoryOpen = false;
+            }
+            self->buttonTimer = time;
+        }
+    }
+    if (self->inventoryOpen) {
+        SDL_Rect rect = {WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 - 100, 200, 200};
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
     }

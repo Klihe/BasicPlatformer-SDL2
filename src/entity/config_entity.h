@@ -20,4 +20,13 @@ enum Location {
     MAP2
 };
 
+enum Items {
+    NONE,
+    SWORD,
+    BOW,
+    ARROW,
+    POTION,
+    CHEST
+};
+
 #endif // CONFIG_ENTITY_H

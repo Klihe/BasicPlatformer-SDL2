@@ -101,6 +101,7 @@ int main() {
 
         // handle player input
         Uint32 time = SDL_GetTicks();
+        //Uint32 mouse_state = SDL_GetMouseState(NULL, NULL);
         const Uint8* state = SDL_GetKeyboardState(NULL);
 
         // clear screen
@@ -146,7 +147,7 @@ int main() {
                 updatePlayer(&player);
                 healthBar(renderer_main, player.health);
 
-                openChestPlayer(&player, state, renderer_main);
+                chestPlayer(&player, state, renderer_main, time);
                 break;
             case PAUSE:
                 game_state = pause(renderer_main, state);

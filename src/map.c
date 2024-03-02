@@ -16,7 +16,7 @@ void drawMap(Map* map, SDL_Renderer* renderer, SDL_Texture* texture_block_ladder
             //     SDL_RenderFillRect(renderer, &rect);
             // }
             if (map->tiles[j][i] == TILE_TREAUSURE) {
-                SDL_RenderCopy(renderer, texture_block_treasure, NULL, &(SDL_Rect){i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE});
+                SDL_RenderCopy(renderer, texture_block_treasure, NULL, &(SDL_Rect){i * TILE_SIZE, j * TILE_SIZE + 7*4, 16*4, 13*4});
             }
             if (map->tiles[j][i] == TILE_PORTAL_FOWARD) {
                 SDL_RenderCopy(renderer, texture_block_foward, NULL, &(SDL_Rect){i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE});
