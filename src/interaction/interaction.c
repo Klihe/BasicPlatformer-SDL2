@@ -36,3 +36,13 @@ int attackCollision(SDL_Rect* a, SDL_Rect* b, bool active, int damage) {
         return 0;
     }
 }
+
+bool pointRectCollision(int x, int y, SDL_Rect* rect) {
+    if (x < rect->x || x > rect->x + rect->w) {
+        return false;
+    }
+    if (y < rect->y || y > rect->y + rect->h) {
+        return false;
+    }
+    return true;
+}

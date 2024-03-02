@@ -4,7 +4,7 @@ enum State menu(SDL_Renderer *renderer, const Uint8* keyboard_state) {
     // draw menu
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
     SDL_RenderClear(renderer);
-    if (keyboard_state[SDL_SCANCODE_RETURN]) return GAME;
+    if (button(renderer, SDL_GetMouseState(NULL, NULL), (int[]){100, 50}, (int[]){100, 100})) return GAME;
     return MENU;
 }
 

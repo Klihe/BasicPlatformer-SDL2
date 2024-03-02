@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+#include "UI/ui.h"
+
 enum State {
     MENU,
     GAME,
