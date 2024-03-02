@@ -45,7 +45,9 @@ int main() {
     }
 
     SDL_Texture* img_background = loadTexture("src/img/background.png", renderer_main);
+    SDL_Texture* img_about = loadTexture("src/img/about.png", renderer_main);
     SDL_Texture* img_gameover = loadTexture("src/img/gameover.png", renderer_main);
+    
     SDL_Texture* img_block_ladder = loadTexture("src/img/ladder.png", renderer_main);
     SDL_Texture* img_block_solid = loadTexture("src/img/cobble.png", renderer_main);
     SDL_Texture* img_block_foward = loadTexture("src/img/portal_foward.png", renderer_main);
@@ -117,7 +119,7 @@ int main() {
                 game_state = settings(renderer_main, state);
                 break;
             case ABOUT:
-                game_state = about(renderer_main, state);
+                game_state = about(renderer_main, state, img_about);
                 break;
             case GAME:
                 if (state[SDL_SCANCODE_ESCAPE]) game_state = PAUSE;
@@ -156,7 +158,7 @@ int main() {
                 game_state = pause(renderer_main, state);
                 break;
             case GAMEOVER:
-                game_state = game_over(renderer_main, state);
+                game_state = game_over(renderer_main, state, img_gameover);
                 break;
         }
         // present renderer

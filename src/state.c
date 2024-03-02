@@ -18,10 +18,9 @@ enum State settings(SDL_Renderer *renderer, const Uint8* keyboard_state) {
     return SETTINGS;
 }
 
-enum State about(SDL_Renderer *renderer, const Uint8* keyboard_state) {
+enum State about(SDL_Renderer *renderer, const Uint8* keyboard_state, SDL_Texture* img_about) {
     // draw about
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 0);
-    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, img_about, NULL, NULL);
     if (keyboard_state[SDL_SCANCODE_ESCAPE]) return MENU;
     return ABOUT;
 }
@@ -34,10 +33,9 @@ enum State pause(SDL_Renderer *renderer, const Uint8* keyboard_state) {
     return PAUSE;
 }
 
-enum State game_over(SDL_Renderer *renderer, const Uint8* keyboard_state) {
+enum State game_over(SDL_Renderer *renderer, const Uint8* keyboard_state, SDL_Texture* img_gameover) {
     // draw game over
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 0);
-    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, img_gameover, NULL, NULL);
     if (keyboard_state[SDL_SCANCODE_RETURN]) return MENU;
     return GAMEOVER;
 }
