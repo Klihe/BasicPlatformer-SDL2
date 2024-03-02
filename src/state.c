@@ -2,10 +2,28 @@
 
 enum State menu(SDL_Renderer *renderer, const Uint8* keyboard_state) {
     // draw menu
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
     SDL_RenderClear(renderer);
-    if (button(renderer, SDL_GetMouseState(NULL, NULL), (int[]){100, 50}, (int[]){100, 100})) return GAME;
+    if (button(renderer, SDL_GetMouseState(NULL, NULL), (int[]){300, 100}, (int[]){WINDOW_WIDTH/2 - 300/2, 300})) return GAME;
+    if (button(renderer, SDL_GetMouseState(NULL, NULL), (int[]){300, 100}, (int[]){WINDOW_WIDTH/2 - 300/2, 420})) return SETTINGS;
+    if (button(renderer, SDL_GetMouseState(NULL, NULL), (int[]){300, 100}, (int[]){WINDOW_WIDTH/2 - 300/2, 540})) return ABOUT;
     return MENU;
+}
+
+enum State settings(SDL_Renderer *renderer, const Uint8* keyboard_state) {
+    // draw settings
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+    SDL_RenderClear(renderer);
+    if (keyboard_state[SDL_SCANCODE_ESCAPE]) return MENU;
+    return SETTINGS;
+}
+
+enum State about(SDL_Renderer *renderer, const Uint8* keyboard_state) {
+    // draw about
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 0);
+    SDL_RenderClear(renderer);
+    if (keyboard_state[SDL_SCANCODE_ESCAPE]) return MENU;
+    return ABOUT;
 }
 
 enum State pause(SDL_Renderer *renderer, const Uint8* keyboard_state) {

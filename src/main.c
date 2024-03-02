@@ -125,6 +125,12 @@ int main() {
             case MENU:
                 game_state = menu(renderer_main, state);
                 break;
+            case SETTINGS:
+                game_state = settings(renderer_main, state);
+                break;
+            case ABOUT:
+                game_state = about(renderer_main, state);
+                break;
             case GAME:
                 if (state[SDL_SCANCODE_ESCAPE]) game_state = PAUSE;
                 if (player.health <= 0) game_state = GAMEOVER;
