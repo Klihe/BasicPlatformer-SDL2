@@ -50,6 +50,7 @@ int main() {
     SDL_Texture* img_block_foward = loadTexture("src/img/portal_foward.png", renderer_main);
     SDL_Texture* img_block_backward = loadTexture("src/img/portal_backward.png", renderer_main);
     SDL_Texture* img_block_treasure = loadTexture("src/img/treasure.png", renderer_main);
+    SDL_Texture* img_block_lava = loadTexture("src/img/lava.png", renderer_main);
 
     SDL_Texture* img_player[4] = {loadTexture("src/img/player/player_1.png", renderer_main),
                                   loadTexture("src/img/player/player_2.png", renderer_main),
@@ -65,8 +66,8 @@ int main() {
     // create player and map
     Player player = createPlayer(WINDOW_WIDTH/2, WINDOW_HEIGHT-160+1, 44, 64, 5);
     Enemy enemy[5] = {createEnemy(14, 6, 56, 64, 3, 14, 11),
-                      createEnemy(2, 5, 56, 64, 3, 7, 1),
-                      createEnemy(6, 5, 56, 64, 3, 7, 1),
+                      createEnemy(2, 5, 56, 64, 3, 3, 1),
+                      createEnemy(6, 5, 56, 64, 3, 7, 5),
                       createEnemy(7, 3, 56, 64, 3, 12, 7),
                       createEnemy(1, 2, 56, 64, 3, 4, 1)};
     Map map1 = {{{0,0,0,0,0,0,0,0,0,3,0,0,0,5,0,0},
@@ -74,7 +75,7 @@ int main() {
                 {0,1,1,2,1,0,0,3,0,2,0,3,0,0,0,0},
                 {0,0,0,2,0,0,0,2,1,1,1,2,1,0,0,0},
                 {0,3,0,2,0,0,0,2,0,0,0,2,0,0,0,0},
-                {0,2,1,1,1,1,1,1,0,0,0,2,0,3,0,0},
+                {0,2,1,1,7,1,1,1,0,0,0,2,0,3,0,0},
                 {0,2,0,0,0,0,0,0,0,0,0,1,1,2,1,0},
                 {0,2,0,0,0,0,0,0,0,0,0,0,0,2,0,0},
                 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}};
@@ -122,7 +123,7 @@ int main() {
                 if (player.health <= 0) game_state = GAMEOVER;
                 switch (player.location) {
                     case MAP1:
-                        drawMap(&map1, renderer_main, img_block_ladder, img_block_solid, img_block_foward, img_block_backward, img_block_treasure);
+                        drawMap(&map1, renderer_main, img_block_ladder, img_block_solid, img_block_foward, img_block_backward, img_block_treasure, img_block_lava);
                         handlePlayerCollision(&player, &map1);
                         for (int i = 0; i < 5; i++) {
                             drawEnemy(&enemy[i], renderer_main, img_enemy, time);
@@ -135,7 +136,7 @@ int main() {
                         }
                         break;
                     case MAP2:
-                        drawMap(&map2, renderer_main, img_block_ladder, img_block_solid, img_block_foward, img_block_backward, img_block_treasure);
+                        drawMap(&map2, renderer_main, img_block_ladder, img_block_solid, img_block_foward, img_block_backward, img_block_treasure, img_block_lava);
                         handlePlayerCollision(&player, &map2);
                         break;
                 }
@@ -148,6 +149,7 @@ int main() {
                 healthBar(renderer_main, player.health);
 
                 chestPlayer(&player, state, renderer_main, time);
+                inventoryPlayer(&player, state, renderer_main, time);
                 break;
             case PAUSE:
                 game_state = pause(renderer_main, state);

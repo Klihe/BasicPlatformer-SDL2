@@ -63,11 +63,11 @@ void moveEnemy(Enemy* self, int playerX, int playerY) {
     if (self->isAlive) {
         self->isMoving = true;
         self->speed = self->defaultSpeed * self->speedMultiplier;
-        if (self->seePlayer && self->y < playerY + 40 && self->y > playerY - 40) {
-            if (self->x < playerX - 40 && self->moveFrom > playerX) {
+        if (self->seePlayer && self->y < playerY + self->width && self->y > playerY - self->width) {
+            if (self->x < playerX - self->width && self->moveFrom > playerX) {
                 self->speedMultiplier = 2;
                 self->x += self->speed;
-            } else if (self->x > playerX + 40 && self->moveTo < playerX) {
+            } else if (self->x > playerX + self->width && self->moveTo < playerX) {
                 self->speedMultiplier = 2;
                 self->x -= self->speed;
             } else {
@@ -77,7 +77,7 @@ void moveEnemy(Enemy* self, int playerX, int playerY) {
             self->seePlayer = false;
         }
         if (self->faceDirection == FACE_LEFT && !self->seePlayer) {
-            if ((self->y < playerY + 40 && self->y > playerY - 40) && self->x > playerX && self->moveTo < playerX) {
+            if ((self->y < playerY + self->width && self->y > playerY - self->width) && self->x > playerX && self->moveTo < playerX) {
                 self->seePlayer = true;
             }
             else if (self->x > self->moveTo) {
@@ -87,7 +87,7 @@ void moveEnemy(Enemy* self, int playerX, int playerY) {
                 self->faceDirection = FACE_RIGHT;
             }
         } else if (self->faceDirection == FACE_RIGHT && !self->seePlayer) {
-            if ((self->y < playerY + 40 && self->y > playerY - 40) && self->x < playerX && self->moveFrom > playerX) {
+            if ((self->y < playerY + self->width && self->y > playerY - self->width) && self->x < playerX && self->moveFrom > playerX) {
                 self->seePlayer = true;
             }
             else if (self->x < self->moveFrom) {

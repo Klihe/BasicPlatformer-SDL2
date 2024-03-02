@@ -73,6 +73,7 @@ Player createPlayer(int x, int y, int width, int height, int speed);
 void drawPlayer(Player* self, SDL_Renderer* renderer, SDL_Texture** texture, Uint32 time);
 void movePlayer(Player* self, const Uint8* state);
 void chestPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);
+void inventoryPlayer(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);
 void handlePlayerCollision(Player* self, Map* map);
 void attack1Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);
 void attack2Player(Player* self, const Uint8* state, SDL_Renderer* renderer, Uint32 time);

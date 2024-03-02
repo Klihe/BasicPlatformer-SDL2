@@ -15,7 +15,8 @@ enum TileType{
     TILE_LADDER_DOWN,
     TILE_TREAUSURE,
     TILE_PORTAL_FOWARD,
-    TILE_PORTAL_BACKWARD
+    TILE_PORTAL_BACKWARD,
+    TILE_LAVA
 };
 
 // define map struct
@@ -25,6 +26,6 @@ typedef struct {
 
 
 // map's functions
-void drawMap(Map *map, SDL_Renderer* renderer, SDL_Texture* texture_block_ladder, SDL_Texture* texture_block_solid, SDL_Texture* texture_block_foward, SDL_Texture* texture_block_backward, SDL_Texture* texture_block_treasure);
+void drawMap(Map *map, SDL_Renderer* renderer, SDL_Texture* ladder, SDL_Texture* solid, SDL_Texture* foward, SDL_Texture* backward, SDL_Texture* treasure, SDL_Texture* lava);
 
 #endif
