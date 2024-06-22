@@ -23,18 +23,18 @@ make
 
 ## Controls
 
-w - up
-d - down
-a - right
+w - up  
+d - down  
+a - right  
 d - left
 
-lshift - sprint
+lshift - sprint  
 space - jump
 
-attack1 - e
+attack1 - e  
 attack2 - q
 
-interact - f
+interact - f  
 inventory - i
 
 ## Example
